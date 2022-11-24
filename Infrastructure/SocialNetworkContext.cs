@@ -9,5 +9,5 @@ public class SocialNetworkContext : DbContext
         {
         }
 
-        public DbSet<Post> Post {get; set;}
+        public DbSet<Post>? Posts {get; set;}
     }

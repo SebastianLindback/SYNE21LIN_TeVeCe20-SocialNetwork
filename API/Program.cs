@@ -36,9 +36,11 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
     var context = scope.ServiceProvider.GetRequiredService<SocialNetworkContext>();
 
     await context.Database.MigrateAsync();
+    await SeedSocialNetwork.SeedAsync(context, logger);
 }
 
 
