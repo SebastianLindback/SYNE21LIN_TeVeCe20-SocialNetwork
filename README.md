@@ -1,2 +1,14 @@
-# SYNE21LIN_TeVeCe20-SocialNetwork
- 
+# Social-Network
+
+## Client
+- ReactJS
+
+## Api
+- asp.net webapi
+- c#
+
+## Infrastructure
+- Entity-Framework
+
+## Entity
+- C# POCO
