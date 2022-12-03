@@ -1,0 +1,48 @@
+PostController:
+    Post:
+    {
+        PublishedBy,
+        To,
+        Content,
+        Date
+    }
+    PostOnUserTimeLine(user.id, {post})
+    
+UserController:
+    GetUserTimeline(user.id) // where post.to == user.id
+    Login/Register -- Authentication and Identity.    
+
+SubscriptionsController:
+    Subscription: {
+        ID,
+        User,
+        SubscribeTo,
+        Date
+    }
+    ListAllSubscriptions()
+    SubscribeToUser()
+    RemoveSubscriptionToUser()
+
+Wall:
+ViewAllPostsFromSubscriptions() 
+
+MessageController:
+    DM. direct message:
+    - Conversations: {
+    ID, 
+    Conversation_Access: 
+        {
+            User A, 
+            User B
+        }, 
+        Messages: 
+            {
+                ID, 
+                Conversation ID, 
+                message, 
+                sentDate, 
+                Status : {Failed, Complete}
+            }
+        }
+    GetConversations()
+    SendMessage() if Conversation else MakeConversation()
