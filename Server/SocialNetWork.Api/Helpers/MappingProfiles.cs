@@ -10,6 +10,7 @@ namespace API.Helpers
         {
             CreateMap<Post, PostDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<Message, MessageDto>().ReverseMap();
 
         }
     }

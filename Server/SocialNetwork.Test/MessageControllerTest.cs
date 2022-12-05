@@ -20,7 +20,6 @@ namespace SocialNetwork.Test
     {
         private IMapper _mapper;
         private Mock<IGenericRepository<Message>> _messageRepositoryMock;
-        private Mock<IGenericRepository<User>> _userRepositoryMock;
 
 
         [TestInitialize]
@@ -34,30 +33,7 @@ namespace SocialNetwork.Test
             _mapper = mapper;
 
             _messageRepositoryMock = new Mock<IGenericRepository<Message>>();
-            _userRepositoryMock = new Mock<IGenericRepository<User>>();
         }
-
-
-        // [TestMethod]
-        // public async Task ShouldGetOnePostFromController()
-        // {
-        //     // Arrange
-        //     _messageRepositoryMock.Setup(x => x.GetByIdAsync(1))
-        //         .ReturnsAsync(new Message
-        //         {
-        //             Id = 1,
-        //             CreatedDate = DateTime.Now,
-        //             Content = "Hello World",
-        //         });
-
-        //     // Act
-        //     var messageController = new MessageController(_messageRepositoryMock.Object, _mapper, _userRepositoryMock.Object);
-        //     var postDto = await messageController.Get(1);
-
-        //     // Assert
-        //     Assert.AreEqual(1, postDto.Id);
-
-        // }
 
         [TestMethod]
         public async Task GetMessagesToUser_ShouldReturnAllMessagesToUser()
@@ -111,7 +87,7 @@ namespace SocialNetwork.Test
                         Content = "Hello User C"
                     }
                 });
-            var messageController = new MessageController(genericRepository.Object, _mapper, _userRepositoryMock.Object);
+            var messageController = new MessageController(genericRepository.Object, _mapper);
             
             // Act
             var _sup = await messageController.GetAllMessages();
