@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
-using Entity.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using SocialNetwork.Api.Dto;
 using SocialNetwork.Entity;
+using SocialNetwork.Entity.Interface;
 
 namespace SocialNetwork.Api.Controllers
 {
@@ -10,12 +11,12 @@ namespace SocialNetwork.Api.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        private readonly IGenericRepository<Post> _postRepository;
+        private readonly IPostRepository _postRepository;
         private readonly IGenericRepository<User> _userRepository;
         private readonly IMapper _mapper;
 
         public PostController(
-            IGenericRepository<Post> postRepository, 
+            IPostRepository postRepository, 
             IMapper mapper, 
             IGenericRepository<User> userRepository)
         {
@@ -35,12 +36,15 @@ namespace SocialNetwork.Api.Controllers
             };
         }
 
-        [HttpGet("{id}")]
-        public async Task<PostDto> Get(int id)
+        [HttpGet("{userId}")]
+        public async Task<PostsDto> Get(int userId)
         {
-            var post = await _postRepository.GetByIdAsync(id);
-            var postDto = _mapper.Map<PostDto>(post);
-            return postDto;
+            var posts = await _postRepository.ListAllByUserIdAsync(userId);
+            var postDtos = _mapper.Map<ICollection<PostDto>>(posts.OrderByDescending(x => x.CreatedDate));
+            return new PostsDto
+            {
+                Posts = postDtos
+            };
         }
 
         [HttpPost]

@@ -1,6 +1,4 @@
-using SocialNetwork.Entity.Specification;
-
-namespace Entity.Interfaces
+namespace SocialNetwork.Entity.Interface
 {
     public interface IGenericRepository<T>
     {

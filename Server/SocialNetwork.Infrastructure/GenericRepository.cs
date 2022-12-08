@@ -1,11 +1,10 @@
-using Entity.Interfaces;
-using Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using SocialNetwork.Entity.Specification;
+using SocialNetwork.Entity;
+using SocialNetwork.Entity.Interface;
 
 namespace SocialNetwork.Infrastructure
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         private readonly SocialNetworkContext _context;
         public GenericRepository(SocialNetworkContext context)

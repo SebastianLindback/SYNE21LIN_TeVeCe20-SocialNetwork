@@ -1,17 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using Entity.Interfaces;
+﻿using AutoMapper;
 using Moq;
 using SocialNetwork.Api.Controllers;
 using SocialNetwork.Entity;
-using SocialNetwork.Infrastructure;
 using API.Helpers;
-using SocialNetwork.Api.Dto;
+using SocialNetwork.Entity.Interface;
 
 namespace SocialNetwork.Test
 {
@@ -21,7 +13,6 @@ namespace SocialNetwork.Test
         private IMapper _mapper;
         private Mock<IGenericRepository<Post>> _postRepositoryMock;
         private Mock<IGenericRepository<User>> _userRepositoryMock;
-
 
         [TestInitialize]
         public void Setup()
@@ -36,7 +27,6 @@ namespace SocialNetwork.Test
             _postRepositoryMock = new Mock<IGenericRepository<Post>>();
             _userRepositoryMock = new Mock<IGenericRepository<User>>();
         }
-
 
         [TestMethod]
         public async Task ShouldGetOnePostFromController()

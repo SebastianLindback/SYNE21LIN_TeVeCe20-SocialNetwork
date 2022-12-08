@@ -1,12 +1,13 @@
 using API.Helpers;
-using Entity.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using SocialNetwork.Entity.Interface;
 using SocialNetwork.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+builder.Services.AddScoped(typeof(IPostRepository), (typeof(PostRepository)));
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 // Add services to the container.
