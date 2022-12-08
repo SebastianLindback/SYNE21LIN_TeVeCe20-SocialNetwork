@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Entity.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using SocialNetwork.Api.Dto;
 using SocialNetwork.Entity;
-using SocialNetwork.Entity.Interface;
 
 namespace SocialNetwork.Api.Controllers
 {

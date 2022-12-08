@@ -3,7 +3,7 @@ using Moq;
 using SocialNetwork.Api.Controllers;
 using SocialNetwork.Entity;
 using API.Helpers;
-using SocialNetwork.Entity.Interface;
+using Entity.Interfaces;
 
 namespace SocialNetwork.Test
 {

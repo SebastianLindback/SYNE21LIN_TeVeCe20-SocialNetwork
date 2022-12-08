@@ -1,6 +1,8 @@
+using Entity.Interfaces;
+using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Entity;
-using SocialNetwork.Entity.Interface;
+using SocialNetwork.Entity.Specification;
 
 namespace SocialNetwork.Infrastructure
 {
