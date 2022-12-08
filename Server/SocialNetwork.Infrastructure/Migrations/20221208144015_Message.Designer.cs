@@ -11,13 +11,40 @@ using SocialNetwork.Infrastructure;
 namespace SocialNetwork.Infrastructure.Migrations
 {
     [DbContext(typeof(SocialNetworkContext))]
-    [Migration("20221205085619_Message")]
+    [Migration("20221208144015_Message")]
     partial class Message
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.11");
+
+            modelBuilder.Entity("SocialNetwork.Entity.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FK_ReceiverId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FK_SenderId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FK_ReceiverId");
+
+                    b.HasIndex("FK_SenderId");
+
+                    b.ToTable("Messages");
+                });
 
             modelBuilder.Entity("SocialNetwork.Entity.Post", b =>
                 {
@@ -55,6 +82,25 @@ namespace SocialNetwork.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("SocialNetwork.Entity.Message", b =>
+                {
+                    b.HasOne("SocialNetwork.Entity.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("FK_ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SocialNetwork.Entity.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("FK_SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("SocialNetwork.Entity.Post", b =>
