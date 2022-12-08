@@ -290,3 +290,4 @@ Server/SocialNetWork.Api/socialnetwork.db
 Server/SocialNetWork.Api/socialnetwork.db-shm
 Client/.idea/Client.iml
 Client/.idea/
+.vscode/settings.json
