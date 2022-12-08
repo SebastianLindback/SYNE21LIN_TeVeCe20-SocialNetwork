@@ -14,6 +14,7 @@ using API.Helpers;
 using SocialNetwork.Api.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SocialNetwork.Entity.Specification;
 
 namespace SocialNetwork.Test
 {
@@ -100,7 +101,7 @@ namespace SocialNetwork.Test
 
         
         [TestMethod]
-        public async Task GetMessagesToUser_ShouldReturnAllMessagesToUser()
+        public async Task GetAllMessages_ShouldReturnAllMessages()
         {
             // Arrange
             var _messageRepositoryMock = new Mock<IGenericRepository<Message>>();
@@ -112,11 +113,11 @@ namespace SocialNetwork.Test
                     new Message
                     {
                         Id = 1,
-                        Receiver = new User {
+                        Sender = new User {
                            Id = 1,
                            Name = "Test User A"
                         },
-                        Sender = new User {
+                        Receiver = new User {
                            Id = 2,
                            Name = "Test User B"
                         },
@@ -126,11 +127,11 @@ namespace SocialNetwork.Test
                     new Message
                     {
                         Id = 2,
-                        Receiver = new User {
+                        Sender = new User {
                            Id = 2,
                            Name = "Test User B"
                         },
-                        Sender = new User {
+                        Receiver = new User {
                            Id = 1,
                            Name = "Test User A"
                         },
@@ -140,11 +141,11 @@ namespace SocialNetwork.Test
                     new Message
                     {
                         Id = 3,
-                        Receiver = new User {
+                        Sender = new User {
                            Id = 1,
                            Name = "Test User A"
                         },
-                        Sender = new User {
+                        Receiver = new User {
                            Id = 3,
                            Name = "Test User C"
                         },

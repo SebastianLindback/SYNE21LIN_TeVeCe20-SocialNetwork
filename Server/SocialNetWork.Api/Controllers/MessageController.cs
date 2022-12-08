@@ -58,8 +58,8 @@ public class MessageController : ControllerBase
             return BadRequest("Problem creating Message");
         }
 
-    [HttpPost("get")]
-    public async Task<MessagesDto> GetMessageConversation([FromQuery] int userA, [FromQuery] int userB)
+    [HttpPost("conversation")]
+    public async Task<MessagesDto> GetConversation([FromQuery] int userA, [FromQuery] int userB)
         {
             var spec = new MessageFilter_UsersConversation(userA, userB);
             var messages = await _messageRepository.ListWithSpec(spec);
