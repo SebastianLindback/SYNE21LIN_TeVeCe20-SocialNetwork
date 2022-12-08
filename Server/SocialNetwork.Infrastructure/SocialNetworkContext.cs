@@ -14,6 +14,8 @@ namespace SocialNetwork.Infrastructure
 
         public DbSet<Post> Posts { get; set; }
 
+        public DbSet<Subscription> Subscriptions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

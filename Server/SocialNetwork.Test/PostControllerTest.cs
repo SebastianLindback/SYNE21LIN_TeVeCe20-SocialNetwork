@@ -45,7 +45,7 @@ namespace SocialNetwork.Test
             var postDto = await postController.Get(1);
 
             // Assert
-            Assert.AreEqual(1, postDto.Id);
+            Assert.AreEqual(1, postDto.Posts.Count);
 
         }
 

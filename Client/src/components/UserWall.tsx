@@ -3,10 +3,9 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom';
 import Post from './Post';
 
-
 const Wall = () => {
     const { userId } = useParams<{ userId: string }>();
-   
+
     const { isLoading, error, data } = useQuery({
         queryKey: ['UserWallData'],
         queryFn: () =>{
@@ -32,6 +31,7 @@ const Wall = () => {
 
     return (
         <>
+
             <Post/>
             <div className="row bg-light text-dark rounded">
                 <div className="col-sm rounded">

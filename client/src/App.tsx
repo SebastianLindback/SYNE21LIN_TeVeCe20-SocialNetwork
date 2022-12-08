@@ -6,9 +6,8 @@ import {
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import './App.css';
 import Wall from './components/Wall';
-import { createBrowserRouter, Route, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import UserWall from './components/UserWall';
-
 
 // Create a client
 const queryClient = new QueryClient()
@@ -25,17 +24,14 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-
   return (
     <div className="container">
       <h1 className='display-1 center'>Social Network</h1>
-      
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
         <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>     
+      </QueryClientProvider>
     </div>
-   
   );
 }
 

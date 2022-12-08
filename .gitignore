@@ -1,7 +1,5 @@
-# ignore VSCODE
-.vscode/
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
+/idea
 # dependencies
 /node_modules
 /.pnp
@@ -290,3 +288,5 @@ FakesAssemblies/
 Server/SocialNetWork.Api/socialnetwork.db-wal
 Server/SocialNetWork.Api/socialnetwork.db
 Server/SocialNetWork.Api/socialnetwork.db-shm
+Client/.idea/Client.iml
+Client/.idea/

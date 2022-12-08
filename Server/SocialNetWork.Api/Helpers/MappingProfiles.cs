@@ -10,6 +10,9 @@ namespace API.Helpers
         {
             CreateMap<Post, PostDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<Subscription, SubscriptionDto>()
+            .ForMember(x => x.SubscribedToId, o => o.MapFrom(c => c.SubscribedToId))
+            .ForMember(x => x.SubscriberId, o => o.MapFrom(c => c.SubscriberId));
 
         }
     }

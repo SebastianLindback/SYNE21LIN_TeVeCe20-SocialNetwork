@@ -11,12 +11,12 @@ namespace SocialNetwork.Api.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        private readonly IPostRepository _postRepository;
+        private readonly IGenericRepository<Post> _postRepository;
         private readonly IGenericRepository<User> _userRepository;
         private readonly IMapper _mapper;
 
         public PostController(
-            IPostRepository postRepository, 
+            IGenericRepository<Post> postRepository, 
             IMapper mapper, 
             IGenericRepository<User> userRepository)
         {
@@ -39,8 +39,8 @@ namespace SocialNetwork.Api.Controllers
         [HttpGet("{userId}")]
         public async Task<PostsDto> Get(int userId)
         {
-            var posts = await _postRepository.ListAllByUserIdAsync(userId);
-            var postDtos = _mapper.Map<ICollection<PostDto>>(posts.OrderByDescending(x => x.CreatedDate));
+            var post = await _postRepository.GetByIdAsync(userId);
+            var postDtos = _mapper.Map<ICollection<PostDto>>(post);
             return new PostsDto
             {
                 Posts = postDtos

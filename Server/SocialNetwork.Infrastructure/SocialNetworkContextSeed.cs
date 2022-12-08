@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SocialNetwork.Entity;
+﻿using SocialNetwork.Entity;
 
 namespace SocialNetwork.Infrastructure
 {
@@ -39,22 +34,36 @@ namespace SocialNetwork.Infrastructure
                         }
                     }
                 };
-                  var user3 = new User
-                {
-                    Name = "shit Cage ",
-                    Posts = new List<Post>
-                    {
-                        new()
-                        {
-                            CreatedDate = DateTime.Now,
-                            Message = "Hello Hello",
-                        }
-                    }
-                };
 
                 await context.Users.AddRangeAsync(user);
                 await context.Users.AddRangeAsync(user2);
-                await context.Users.AddRangeAsync(user3);
+                
+                await context.SaveChangesAsync();
+            }
+
+             if (!context.Subscriptions.Any())
+            {
+
+                var subscription = new Subscription
+                {
+                    Id = 1,
+                    SubscribedTo = new User{ 
+                    Name = "Robert Jansz"
+                    },
+                
+                  
+                    Subscriber = new User{ 
+                    Name = "Jonny Cage "
+                    },
+                  
+                    CreatedDate = DateTime.Now
+                };
+
+               
+                
+                
+
+                await context.Subscriptions.AddRangeAsync(subscription);
                 
                 await context.SaveChangesAsync();
             }
