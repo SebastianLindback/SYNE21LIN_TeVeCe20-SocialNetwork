@@ -1,4 +1,7 @@
-namespace SocialNetwork.Entity.Interface
+using SocialNetwork.Entity;
+using SocialNetwork.Entity.Specification;
+
+namespace Entity.Interfaces
 {
     public interface IGenericRepository<T>
     {
@@ -6,6 +9,7 @@ namespace SocialNetwork.Entity.Interface
 
         Task<T> GetByIdAsync(dynamic id);
 
-        Task<T> CreateAsync(T entity);
+        Task<int> CreateAsync(T entity);
+        Task<IReadOnlyList<T>> ListWithSpec(ISpecification<T> spec);
     }
 }

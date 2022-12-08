@@ -14,6 +14,9 @@ namespace API.Helpers
             .ForMember(x => x.SubscribedToId, o => o.MapFrom(c => c.SubscribedToId))
             .ForMember(x => x.SubscriberId, o => o.MapFrom(c => c.SubscriberId));
 
+            CreateMap<Message, MessageDto>()
+            .ForMember(x => x.ReceiverId, o => o.MapFrom(c => c.FK_ReceiverId))
+            .ForMember(x => x.SenderId, o => o.MapFrom(c => c.FK_SenderId));
         }
     }
 }

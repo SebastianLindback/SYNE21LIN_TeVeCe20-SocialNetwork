@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialNetwork.Infrastructure;
 
@@ -10,9 +11,10 @@ using SocialNetwork.Infrastructure;
 namespace SocialNetwork.Infrastructure.Migrations
 {
     [DbContext(typeof(SocialNetworkContext))]
-    partial class SocialNetworkContextModelSnapshot : ModelSnapshot
+    [Migration("20221208144015_Message")]
+    partial class Message
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.11");
@@ -67,30 +69,6 @@ namespace SocialNetwork.Infrastructure.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("SocialNetwork.Entity.Subscription", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SubscribedToId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SubscriberId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SubscribedToId");
-
-                    b.HasIndex("SubscriberId");
-
-                    b.ToTable("Subscriptions");
-                });
-
             modelBuilder.Entity("SocialNetwork.Entity.User", b =>
                 {
                     b.Property<int>("Id")
@@ -134,25 +112,6 @@ namespace SocialNetwork.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("SocialNetwork.Entity.Subscription", b =>
-                {
-                    b.HasOne("SocialNetwork.Entity.User", "SubscribedTo")
-                        .WithMany()
-                        .HasForeignKey("SubscribedToId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SocialNetwork.Entity.User", "Subscriber")
-                        .WithMany()
-                        .HasForeignKey("SubscriberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SubscribedTo");
-
-                    b.Navigation("Subscriber");
                 });
 
             modelBuilder.Entity("SocialNetwork.Entity.User", b =>

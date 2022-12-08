@@ -22,11 +22,19 @@ namespace SocialNetwork.Infrastructure
             return await _context.Set<T>().ToListAsync();
         }
 
-        public async Task<T> CreateAsync(T entity)
+        public async Task<int> CreateAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            var result = await _context.SaveChangesAsync();
+            return result;
+        }
+        public async Task<IReadOnlyList<T>> ListWithSpec(ISpecification<T> spec)
+        {
+            return await ApplySpec(spec).ToListAsync();
+        }
+        private IQueryable<T> ApplySpec(ISpecification<T> spec)
+        {
+            return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
         }
     }
 }
