@@ -13,22 +13,48 @@ namespace SocialNetwork.Infrastructure
         {
             if (!context.Users.Any())
             {
+
                 var user = new User
                 {
-                    Id = 1,
                     Name = "Robert Jansz",
                     Posts = new List<Post>
                     {
                         new Post
                         {
-                            Id = 1,
                             CreatedDate = DateTime.Now,
                             Message = "Hello World",
                         }
                     }
                 };
+                
+                var user2 = new User
+                {
+                    Name = "Jonny Cage ",
+                    Posts = new List<Post>
+                    {
+                        new()
+                        {
+                            CreatedDate = DateTime.Now,
+                            Message = "Hello Again",
+                        }
+                    }
+                };
+                  var user3 = new User
+                {
+                    Name = "shit Cage ",
+                    Posts = new List<Post>
+                    {
+                        new()
+                        {
+                            CreatedDate = DateTime.Now,
+                            Message = "Hello Hello",
+                        }
+                    }
+                };
 
-                await context.Users.AddAsync(user);
+                await context.Users.AddRangeAsync(user);
+                await context.Users.AddRangeAsync(user2);
+                await context.Users.AddRangeAsync(user3);
                 
                 await context.SaveChangesAsync();
             }

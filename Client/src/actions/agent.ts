@@ -19,12 +19,13 @@ const requests = {
   }
 
   const Posts = {
-    list: (params?: URLSearchParams) => requests.get<PostsResponse>('/Post', params),
-    post: (post: Post) => requests.post<PostResponse>('/Post', post),
+    All: (params?: URLSearchParams) => requests.get<PostsResponse>('/Post', params),
+    User: (id?: string) => requests.get<PostsResponse>(`/Post/${id}`),
+    Save: (post: Post) => requests.post<PostResponse>('/Post', post),
   }
 
   const Agent = {
-    Posts,
+    Posts
   }
 
   export default Agent;
