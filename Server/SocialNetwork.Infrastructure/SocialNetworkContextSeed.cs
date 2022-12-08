@@ -29,6 +29,13 @@ namespace SocialNetwork.Infrastructure
                 };
 
                 await context.Users.AddAsync(user);
+
+                await context.Users.AddAsync(new User
+                {
+                    Id = 2,
+                    Name = "test user",
+                    
+                });
                 
                 await context.SaveChangesAsync();
             }
