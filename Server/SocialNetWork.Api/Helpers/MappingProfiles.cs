@@ -10,8 +10,9 @@ namespace API.Helpers
         {
             CreateMap<Post, PostDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
-            CreateMap<Message, MessageDto>().ReverseMap();
-
+            CreateMap<Message, MessageDto>()
+            .ForMember(x => x.ReceiverId, o => o.MapFrom(c => c.FK_ReceiverId))
+            .ForMember(x => x.SenderId, o => o.MapFrom(c => c.FK_SenderId));
         }
     }
 }
