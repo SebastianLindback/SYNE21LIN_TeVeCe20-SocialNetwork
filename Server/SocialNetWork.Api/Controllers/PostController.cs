@@ -52,7 +52,7 @@ namespace SocialNetwork.Api.Controllers
                 post.User = user;
 
             var postCreated = await _postRepository.CreateAsync(post);
-            var postCreatedDto = _mapper.Map<PostDto>(postCreated);
+            var postCreatedDto = _mapper.Map<PostDto>(post);
             
             return postCreatedDto;
         }
