@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using SocialNetwork.Api.Dto;
 using SocialNetwork.Entity;
+using SocialNetwork.Entity.Specification;
 using SocialNetwork.Infrastructure;
 
 namespace SocialNetwork.Api.Controllers
@@ -44,26 +45,41 @@ namespace SocialNetwork.Api.Controllers
             };
         }
 
+          [HttpGet("GetSubscribtions")]
+        public async Task<SubscriptionsDto> GetUserSubscriptions([FromQuery]int userId)
+        {
+            var spec = new Subscribe_Filter_GetUser_Subscribtions(userId);
+           // var Subscriptions = await _subscriptionRepository.ListAllAsync();
+           var Subscriptions = await _subscriptionRepository.ListWithSpec(spec);
+           var subscriptionDtos = _mapper.Map<ICollection<SubscriptionDto>>(Subscriptions.OrderByDescending(x => x.CreatedDate));
+            return new SubscriptionsDto
+            {
+                Subscriptions = subscriptionDtos
+            };
+        }
+
         [HttpGet("follow")]
         public async Task<ActionResult<SubscriptionsDto>> Follow([FromQuery] int Subscriber,[FromQuery] int SubscribedTo)
         {
-            var User = await _userRepository.GetByIdAsync(Subscriber);
-            var Follower = await _userRepository.GetByIdAsync(SubscribedTo);
-            
-            if(Follower == null) return BadRequest(error: "User not found");
-            if(User == null) return BadRequest(error: "User not found");
-
-            var Subscription = new Subscription{
-                Subscriber = User, 
-                SubscribedTo = Follower,
-                CreatedDate = DateTime.Now
-            };
-            
-            var numberOfAddedEntities = await _subscriptionRepository.CreateAsync(Subscription);
-            var uploadSuccessfull = numberOfAddedEntities > 0;
-            
-            if (uploadSuccessfull) return Ok("Message Created Successfully");            
-            return BadRequest("Problem creating Message");
+           // var Subscriptions = await _subscriptionRepository.ListAllAsync();
+           var User = await _userRepository.GetByIdAsync(Subscriber);
+           var Follower = await _userRepository.GetByIdAsync(SubscribedTo);
+           if(Follower == null){
+            return BadRequest(error: "User not found");
+           }
+           if(User == null){
+            return BadRequest(error: "User not found");
+           }
+           var Subscription = new Subscription{
+            Subscriber = User, 
+            SubscribedTo = Follower,
+            CreatedDate = DateTime.Now
+           };
+           var Succeeding = await _subscriptionRepository.CreateAsync(Subscription);
+           if(Succeeding != null){
+            return Ok("Subscribed successfull");
+           }
+           return BadRequest("Issue creating subscription");
         }
     
     }
