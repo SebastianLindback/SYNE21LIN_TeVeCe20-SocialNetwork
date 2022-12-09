@@ -4,7 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using SocialNetwork.Api.Dto;
 using SocialNetwork.Entity;
+<<<<<<< Updated upstream
 using SocialNetwork.Entity.Interface;
+=======
+using SocialNetwork.Entity.Specification;
+>>>>>>> Stashed changes
 using SocialNetwork.Infrastructure;
 
 namespace SocialNetwork.Api.Controllers
@@ -37,6 +41,19 @@ namespace SocialNetwork.Api.Controllers
         {
            // var Subscriptions = await _subscriptionRepository.ListAllAsync();
            var Subscriptions = await _subscriptionRepository.ListAllAsync();
+           var subscriptionDtos = _mapper.Map<ICollection<SubscriptionDto>>(Subscriptions.OrderByDescending(x => x.CreatedDate));
+            return new SubscriptionsDto
+            {
+                Subscriptions = subscriptionDtos
+            };
+        }
+
+          [HttpGet("GetSubscribtions")]
+        public async Task<SubscriptionsDto> GetUserSubscriptions([FromQuery]int userId)
+        {
+            var spec = new Subscribe_Filter_GetUser_Subscribtions(userId);
+           // var Subscriptions = await _subscriptionRepository.ListAllAsync();
+           var Subscriptions = await _subscriptionRepository.ListWithSpec(spec);
            var subscriptionDtos = _mapper.Map<ICollection<SubscriptionDto>>(Subscriptions.OrderByDescending(x => x.CreatedDate));
             return new SubscriptionsDto
             {
