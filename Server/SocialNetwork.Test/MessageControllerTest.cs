@@ -162,6 +162,50 @@ namespace SocialNetwork.Test
             Assert.AreEqual(3, _sup.Messages.Count);
 
         }
+         [TestMethod]
+        public async Task GetConversation_ShouldReturnUsersConversation()
+        {
+            // Arrange
+            _messageRepositoryMock.Setup(x => x.ListWithSpec(It.IsAny<ISpecification<Message>>()))
+                .ReturnsAsync(new List<Message>
+                {
+                    new Message
+                    {
+                        Id = 1,
+                        Sender = new User {
+                           Id = 1,
+                           Name = "Test User A"
+                        },
+                        Receiver = new User {
+                           Id = 2,
+                           Name = "Test User B"
+                        },
+                        CreatedDate = DateTime.Now,
+                        Content = "Hello User B"
+                    },
+                    new Message
+                    {
+                        Id = 2,
+                        Sender = new User {
+                           Id = 2,
+                           Name = "Test User B"
+                        },
+                        Receiver = new User {
+                           Id = 1,
+                           Name = "Test User A"
+                        },
+                        CreatedDate = DateTime.Now,
+                        Content = "Hello User A"
+                    }
+                    
+                });
+            var messageController = new MessageController(_messageRepositoryMock.Object, _userRepositoryMock.Object,  _mapper);
+            // Act
+            var conversation = await messageController.GetConversation(1,2);
+            // Assert
+            Assert.AreEqual(2, conversation.Messages.Count );
+
+        }
     }
 
 }
