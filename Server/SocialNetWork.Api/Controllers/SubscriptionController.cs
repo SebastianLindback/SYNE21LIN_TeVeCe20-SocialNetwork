@@ -76,7 +76,7 @@ namespace SocialNetwork.Api.Controllers
             CreatedDate = DateTime.Now
            };
            var Succeeding = await _subscriptionRepository.CreateAsync(Subscription);
-           if(Succeeding != null){
+           if(Succeeding > 0){
             return Ok("Subscribed successfull");
            }
            return BadRequest("Issue creating subscription");

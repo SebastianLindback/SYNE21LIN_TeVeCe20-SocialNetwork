@@ -72,6 +72,36 @@ namespace SocialNetwork.Test
             // Assert
             Assert.AreEqual(1, subscriptions.Subscriptions.Count);
 
-        }          
+        }       
+
+        [TestMethod]
+        public async Task CreateMessage_ShouldAddMessageToDB()
+        {
+            // Arrange
+
+            _userRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<int>()))
+            .ReturnsAsync((int x) => 
+                new User {
+                    Id = x,
+                    Name = "Test User"
+                }
+            );
+            _subscriptionRepositoryMock.Setup(x => x.CreateAsync(It.IsAny<Subscription>())).ReturnsAsync(1); 
+            
+            var subscriptionController = new SubscriptionController(_subscriptionRepositoryMock.Object, _userRepositoryMock.Object,_mapper);
+            
+            var subscriberId = 1;
+            var subscribedToId = 2;
+            
+            // Act
+            var _sup = await subscriptionController.Follow(subscriberId, subscribedToId);
+            var result = _sup.Result as OkObjectResult;
+            // Assert
+            Assert.AreEqual("Subscribed successfull", result.Value);
+
+
+
+        }
+
     }
 }
