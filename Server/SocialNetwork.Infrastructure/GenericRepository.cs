@@ -34,6 +34,11 @@ namespace SocialNetwork.Infrastructure
         {
             return await ApplySpec(spec).ToListAsync();
         }
+        public async Task<T> GetPropWithSpec(ISpecification<T> spec)
+        {
+            var result = await ApplySpec(spec).ToListAsync();
+            return result.FirstOrDefault();
+        }
         private IQueryable<T> ApplySpec(ISpecification<T> spec)
         {
             return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);

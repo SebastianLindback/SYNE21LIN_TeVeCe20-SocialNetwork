@@ -11,5 +11,7 @@ namespace Entity.Interfaces
 
         Task<int> CreateAsync(T entity);
         Task<IReadOnlyList<T>> ListWithSpec(ISpecification<T> spec);
+
+        Task<T> GetPropWithSpec(ISpecification<T> spec);
     }
 }
