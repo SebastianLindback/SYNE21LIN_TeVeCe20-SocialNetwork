@@ -27,7 +27,7 @@ const requests = {
   }
   const Message = {
     All: (params?: URLSearchParams) => requests.get<MessagesResponse>('/message', params),
-    User: (id1?: string, id2?: string) => requests.get<MessagesResponse>(`/message/conversation/?userA=${id1}&userB=${id2}`),
+    Conversation: (userA?: string, userB?: string) => requests.get<MessagesResponse>(`/message/conversation/?userA=${userA}&userB=${userB}`),
     Send: (post: Post) => requests.post<MessageResponse>('/message', post),
   }
 
