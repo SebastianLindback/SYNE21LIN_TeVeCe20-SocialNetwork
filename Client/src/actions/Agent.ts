@@ -2,6 +2,8 @@ import axios, { AxiosResponse } from 'axios'
 import { Post } from '../models/Post'
 import { PostsResponse } from "../models/PostsResponse"
 import { PostResponse } from "../models/PostResponse"
+import { MessagesResponse } from '../models/MessagesResponse'
+import { MessageResponse } from '../models/MessageResponse'
 
 axios.defaults.baseURL = 'https://localhost:7064/api'
 
@@ -23,9 +25,15 @@ const requests = {
     User: (id?: string) => requests.get<PostsResponse>(`/Post/${id}`),
     Save: (post: Post) => requests.post<PostResponse>('/Post', post),
   }
+  const Message = {
+    All: (params?: URLSearchParams) => requests.get<MessagesResponse>('/message', params),
+    User: (id1?: string, id2?: string) => requests.get<MessagesResponse>(`/message/conversation/?userA=${id1}&userB=${id2}`),
+    Send: (post: Post) => requests.post<MessageResponse>('/message', post),
+  }
 
   const Agent = {
-    Posts
+    Posts,
+    Message
   }
 
   export default Agent;
