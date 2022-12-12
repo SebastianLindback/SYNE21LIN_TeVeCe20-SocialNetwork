@@ -37,14 +37,11 @@ namespace SocialNetwork.Api.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<PostsDto> Get(int userId)
+        public async Task<PostDto> Get(int userId)
         {
             var post = await _postRepository.GetByIdAsync(userId);
-            var postDtos = _mapper.Map<ICollection<PostDto>>(post);
-            return new PostsDto
-            {
-                Posts = postDtos
-            };
+            var postDto = _mapper.Map<PostDto>(post);
+            return postDto;
         }
 
         [HttpPost]

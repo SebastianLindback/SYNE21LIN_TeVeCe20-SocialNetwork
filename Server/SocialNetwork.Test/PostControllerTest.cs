@@ -4,6 +4,7 @@ using SocialNetwork.Api.Controllers;
 using SocialNetwork.Entity;
 using API.Helpers;
 using Entity.Interfaces;
+using SocialNetwork.Api.Dto;
 
 namespace SocialNetwork.Test
 {
@@ -22,6 +23,7 @@ namespace SocialNetwork.Test
                 mc.AddProfile(new MappingProfiles());
             });
             var mapper = mappingConfig.CreateMapper();
+            
             _mapper = mapper;
 
             _postRepositoryMock = new Mock<IGenericRepository<Post>>();
@@ -31,21 +33,23 @@ namespace SocialNetwork.Test
         [TestMethod]
         public async Task ShouldGetOnePostFromController()
         {
-            // Arrange
-            _postRepositoryMock.Setup(x => x.GetByIdAsync(1))
-                .ReturnsAsync(new Post
-                {
-                    Id = 1,
-                    CreatedDate = DateTime.Now,
-                    Message = "Hello World",
-                });
-
-            // Act
+            var inputId = 1;
+            _postRepositoryMock.Setup(x => x.GetByIdAsync(inputId))
+                .ReturnsAsync(
+                    new Post
+                    {
+                        Id = inputId,
+                        CreatedDate = DateTime.Now,
+                        Message = "Hello World",
+                    }
+                );
             var postController = new PostController(_postRepositoryMock.Object, _mapper, _userRepositoryMock.Object);
-            var postDto = await postController.Get(1);
+            
+            // Act
+            var post = await postController.Get(userId: inputId);
 
             // Assert
-            Assert.AreEqual(1, postDto.Posts.Count);
+            Assert.AreEqual(inputId, post.Id);
 
         }
 
