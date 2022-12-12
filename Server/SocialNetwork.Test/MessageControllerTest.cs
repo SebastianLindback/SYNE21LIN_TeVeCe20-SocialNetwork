@@ -162,7 +162,7 @@ namespace SocialNetwork.Test
             Assert.AreEqual(3, _sup.Messages.Count);
 
         }
-         [TestMethod]
+        [TestMethod]
         public async Task GetConversation_ShouldReturnUsersConversation()
         {
             // Arrange
