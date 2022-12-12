@@ -41,7 +41,7 @@ namespace SocialNetwork.Infrastructure
                 await context.SaveChangesAsync();
             }
 
-             if (!context.Subscriptions.Any())
+            if (!context.Subscriptions.Any())
             {
 
                 var subscription = new Subscription
@@ -59,11 +59,43 @@ namespace SocialNetwork.Infrastructure
                     CreatedDate = DateTime.Now
                 };
 
-               
-                
-                
-
                 await context.Subscriptions.AddRangeAsync(subscription);
+                
+                await context.SaveChangesAsync();
+            }
+
+            if (!context.Messages.Any() && context.Users.Any())
+            {
+                var user1 = context.Users.Where(x => x.Id == 1).FirstOrDefault();
+                var user2 = context.Users.Where(x => x.Id == 2).FirstOrDefault();
+                var messages = new List<Message>{
+                    new Message{
+                        Content = "test message to user 1",
+                        Sender = user2,
+                        Receiver = user1,
+                        CreatedDate = DateTime.Now
+                    },
+                    new Message{
+                        Content = "test message to user 2",
+                        Sender = user1,
+                        Receiver = user2,
+                        CreatedDate = DateTime.Now
+                    },
+                    new Message{
+                        Content = "test response to user 1",
+                        Sender = user2,
+                        Receiver = user1,
+                        CreatedDate = DateTime.Now
+                    },
+                    new Message{
+                        Content = "test response to user 2",
+                        Sender = user1,
+                        Receiver = user2,
+                        CreatedDate = DateTime.Now
+                    },
+                }; 
+
+                await context.Messages.AddRangeAsync(messages);
                 
                 await context.SaveChangesAsync();
             }
