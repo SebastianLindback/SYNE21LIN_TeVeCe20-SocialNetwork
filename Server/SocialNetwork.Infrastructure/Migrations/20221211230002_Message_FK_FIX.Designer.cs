@@ -11,8 +11,8 @@ using SocialNetwork.Infrastructure;
 namespace SocialNetwork.Infrastructure.Migrations
 {
     [DbContext(typeof(SocialNetworkContext))]
-    [Migration("20221208144015_Message")]
-    partial class Message
+    [Migration("20221211230002_Message_FK_FIX")]
+    partial class Message_FK_FIX
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,17 +31,17 @@ namespace SocialNetwork.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("FK_ReceiverId")
+                    b.Property<int>("ReceiverId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FK_SenderId")
+                    b.Property<int>("SenderId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FK_ReceiverId");
+                    b.HasIndex("ReceiverId");
 
-                    b.HasIndex("FK_SenderId");
+                    b.HasIndex("SenderId");
 
                     b.ToTable("Messages");
                 });
@@ -69,6 +69,30 @@ namespace SocialNetwork.Infrastructure.Migrations
                     b.ToTable("Posts");
                 });
 
+            modelBuilder.Entity("SocialNetwork.Entity.Subscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SubscribedToId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SubscriberId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubscribedToId");
+
+                    b.HasIndex("SubscriberId");
+
+                    b.ToTable("Subscriptions");
+                });
+
             modelBuilder.Entity("SocialNetwork.Entity.User", b =>
                 {
                     b.Property<int>("Id")
@@ -88,13 +112,13 @@ namespace SocialNetwork.Infrastructure.Migrations
                 {
                     b.HasOne("SocialNetwork.Entity.User", "Receiver")
                         .WithMany()
-                        .HasForeignKey("FK_ReceiverId")
+                        .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SocialNetwork.Entity.User", "Sender")
                         .WithMany()
-                        .HasForeignKey("FK_SenderId")
+                        .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -112,6 +136,25 @@ namespace SocialNetwork.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SocialNetwork.Entity.Subscription", b =>
+                {
+                    b.HasOne("SocialNetwork.Entity.User", "SubscribedTo")
+                        .WithMany()
+                        .HasForeignKey("SubscribedToId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SocialNetwork.Entity.User", "Subscriber")
+                        .WithMany()
+                        .HasForeignKey("SubscriberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubscribedTo");
+
+                    b.Navigation("Subscriber");
                 });
 
             modelBuilder.Entity("SocialNetwork.Entity.User", b =>

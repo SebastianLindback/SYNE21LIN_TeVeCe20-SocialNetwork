@@ -8,11 +8,13 @@ namespace SocialNetwork.Entity.Specification;
 public class MessageFilter_UsersConversation : BaseSpecification<Message>
     {   
         public MessageFilter_UsersConversation(int userA, int userB) : base(x => (
-            (x.FK_ReceiverId == userA && x.FK_SenderId == userB)
+            (x.ReceiverId == userA && x.SenderId == userB)
             ||
-            (x.FK_ReceiverId == userB && x.FK_SenderId == userA)
+            (x.ReceiverId == userB && x.SenderId == userA)
             ))
         {
+            IncludeMethod(x => x.Receiver);
+            IncludeMethod(x => x.Sender);
             SortByDescendingMethod(x => x.CreatedDate);
         }
 

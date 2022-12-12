@@ -29,17 +29,17 @@ namespace SocialNetwork.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("FK_ReceiverId")
+                    b.Property<int>("ReceiverId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FK_SenderId")
+                    b.Property<int>("SenderId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FK_ReceiverId");
+                    b.HasIndex("ReceiverId");
 
-                    b.HasIndex("FK_SenderId");
+                    b.HasIndex("SenderId");
 
                     b.ToTable("Messages");
                 });
@@ -110,13 +110,13 @@ namespace SocialNetwork.Infrastructure.Migrations
                 {
                     b.HasOne("SocialNetwork.Entity.User", "Receiver")
                         .WithMany()
-                        .HasForeignKey("FK_ReceiverId")
+                        .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SocialNetwork.Entity.User", "Sender")
                         .WithMany()
-                        .HasForeignKey("FK_SenderId")
+                        .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
