@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Security.Cryptography.X509Certificates;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,84 @@ namespace SocialNetwork.Test
         private Mock<IGenericRepository<Message>> _messageRepositoryMock;
         private Mock<IGenericRepository<User>> _userRepositoryMock;
 
+        public List<Message> Seed_ListAllAsync { get; set; } = new List<Message>
+        {
+            new Message
+            {
+                Id = 1,
+                Sender = new User {
+                    Id = 1,
+                    Name = "Test User A"
+                },
+                Receiver = new User {
+                    Id = 2,
+                    Name = "Test User B"
+                },
+                CreatedDate = DateTime.Now,
+                Content = "Hello User B"
+            },
+            new Message
+            {
+                Id = 2,
+                Sender = new User {
+                    Id = 2,
+                    Name = "Test User B"
+                },
+                Receiver = new User {
+                    Id = 1,
+                    Name = "Test User A"
+                },
+                CreatedDate = DateTime.Now,
+                Content = "Hello User A"
+            },
+            new Message
+            {
+                Id = 3,
+                Sender = new User {
+                    Id = 1,
+                    Name = "Test User A"
+                },
+                Receiver = new User {
+                    Id = 3,
+                    Name = "Test User C"
+                },
+                CreatedDate = DateTime.Now,
+                Content = "Hello User C"
+            }
+        };
+
+        public List<Message> Seed_ListWithSpec { get; set; } = new List<Message>
+        {
+            new Message
+            {
+                Id = 1,
+                Sender = new User {
+                    Id = 1,
+                    Name = "Test User A"
+                },
+                Receiver = new User {
+                    Id = 2,
+                    Name = "Test User B"
+                },
+                CreatedDate = DateTime.Now,
+                Content = "Hello User B"
+            },
+            new Message
+            {
+                Id = 2,
+                Sender = new User {
+                    Id = 2,
+                    Name = "Test User B"
+                },
+                Receiver = new User {
+                    Id = 1,
+                    Name = "Test User A"
+                },
+                CreatedDate = DateTime.Now,
+                Content = "Hello User A"
+            }
+        };
+
 
         [TestInitialize]
         public void Setup()
@@ -38,33 +117,36 @@ namespace SocialNetwork.Test
             _messageRepositoryMock = new Mock<IGenericRepository<Message>>();
             _userRepositoryMock = new Mock<IGenericRepository<User>>();
             
-            }
+            _userRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<int>()))
+            .ReturnsAsync( (int id) => 
+                new User {
+                    Id = id,
+                    Name = "Test User"
+                }
+            );
+            
+            _messageRepositoryMock.Setup(x => x.CreateAsync(It.IsAny<Message>())).ReturnsAsync(1); 
+
+            _messageRepositoryMock.Setup(x => x.ListAllAsync())
+                .ReturnsAsync(Seed_ListAllAsync);
+
+            _messageRepositoryMock.Setup(x => x.ListWithSpec(It.IsAny<ISpecification<Message>>()))
+                .ReturnsAsync(Seed_ListWithSpec);
+        }
 
         [TestMethod]
         public async Task CreateMessage_ShouldAddMessageToDB()
         {
             // Arrange
-            var _messageRepositoryMock = new Mock<IGenericRepository<Message>>();
-            var _userRepositoryMock = new Mock<IGenericRepository<User>>();
-
-            _userRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<int>()))
-            .ReturnsAsync((int x) => 
-                new User {
-                    Id = x,
-                    Name = "Test User"
-                }
-            );
-            _messageRepositoryMock.Setup(x => x.CreateAsync(It.IsAny<Message>())).ReturnsAsync(1); 
-            
             var messageController = new MessageController(_messageRepositoryMock.Object, _userRepositoryMock.Object,_mapper);
-            
             var senderId = 1;
             var receiverId = 2;
-            string subject = "test";
+
             // Act
-            var _sup = await messageController.CreateMessage(senderId,receiverId,subject);
+            var _sup = await messageController.CreateMessage(senderId,receiverId,"");
+            var result = _sup.Result as OkObjectResult;
             // Assert
-            Assert.AreEqual("Message Created Successfully", _sup.Value);
+            Assert.AreEqual("Message Created Successfully", result.Value);
 
 
         }
@@ -73,29 +155,20 @@ namespace SocialNetwork.Test
         public async Task CreateMessage_ShouldReturnBadRequestIfUserNotFound()
         {
             // Arrange
-            var _messageRepositoryMock = new Mock<IGenericRepository<Message>>();
-            var _userRepositoryMock = new Mock<IGenericRepository<User>>();
-
-            _userRepositoryMock.Setup(x => x.GetByIdAsync(1))
-            .ReturnsAsync( 
-                new User {
-                    Id = 1,
-                    Name = "Test User"
-                }
-            );
-            _messageRepositoryMock.Setup(x => x.CreateAsync(It.IsAny<Message>())).ReturnsAsync(1); 
+            var _emptyUserRepositoryMock = new Mock<IGenericRepository<User>>();
+            _emptyUserRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<int>()))
+            .ReturnsAsync((User)null);
             
-            var messageController = new MessageController(_messageRepositoryMock.Object, _userRepositoryMock.Object,_mapper);
+            var messageController = new MessageController(_messageRepositoryMock.Object, _emptyUserRepositoryMock.Object,_mapper);
             
             var senderId = 1;
             var receiverId = 2;
-            var subject = "test";
             // Act
-            var _sup = await messageController.CreateMessage(senderId,receiverId,subject);
+            var _sup = await messageController.CreateMessage(senderId,receiverId,"");
             // Assert
             var expectBadRequest = _sup.Result as BadRequestObjectResult;
             Assert.IsNotNull(expectBadRequest);
-            Assert.AreEqual("receiver user not found",expectBadRequest.Value);
+            Assert.AreEqual($"Unable to find the user for id: {senderId},{receiverId}",expectBadRequest.Value);
 
         }
 
@@ -104,107 +177,27 @@ namespace SocialNetwork.Test
         public async Task GetAllMessages_ShouldReturnAllMessages()
         {
             // Arrange
-            var _messageRepositoryMock = new Mock<IGenericRepository<Message>>();
-            var _userRepositoryMock = new Mock<IGenericRepository<User>>();
-            
-            _messageRepositoryMock.Setup(x => x.ListAllAsync())
-                .ReturnsAsync(new List<Message>
-                {
-                    new Message
-                    {
-                        Id = 1,
-                        Sender = new User {
-                           Id = 1,
-                           Name = "Test User A"
-                        },
-                        Receiver = new User {
-                           Id = 2,
-                           Name = "Test User B"
-                        },
-                        CreatedDate = DateTime.Now,
-                        Content = "Hello User B"
-                    },
-                    new Message
-                    {
-                        Id = 2,
-                        Sender = new User {
-                           Id = 2,
-                           Name = "Test User B"
-                        },
-                        Receiver = new User {
-                           Id = 1,
-                           Name = "Test User A"
-                        },
-                        CreatedDate = DateTime.Now,
-                        Content = "Hello User A"
-                    },
-                    new Message
-                    {
-                        Id = 3,
-                        Sender = new User {
-                           Id = 1,
-                           Name = "Test User A"
-                        },
-                        Receiver = new User {
-                           Id = 3,
-                           Name = "Test User C"
-                        },
-                        CreatedDate = DateTime.Now,
-                        Content = "Hello User C"
-                    }
-                });
             var messageController = new MessageController(_messageRepositoryMock.Object, _userRepositoryMock.Object, _mapper);
             
             // Act
             var _sup = await messageController.GetAllMessages();
 
             // Assert
-            Assert.AreEqual(3, _sup.Messages.Count);
+            Assert.AreEqual(Seed_ListAllAsync.Count(), _sup.Messages.Count);
 
         }
         [TestMethod]
         public async Task GetConversation_ShouldReturnUsersConversation()
         {
             // Arrange
-            _messageRepositoryMock.Setup(x => x.ListWithSpec(It.IsAny<ISpecification<Message>>()))
-                .ReturnsAsync(new List<Message>
-                {
-                    new Message
-                    {
-                        Id = 1,
-                        Sender = new User {
-                           Id = 1,
-                           Name = "Test User A"
-                        },
-                        Receiver = new User {
-                           Id = 2,
-                           Name = "Test User B"
-                        },
-                        CreatedDate = DateTime.Now,
-                        Content = "Hello User B"
-                    },
-                    new Message
-                    {
-                        Id = 2,
-                        Sender = new User {
-                           Id = 2,
-                           Name = "Test User B"
-                        },
-                        Receiver = new User {
-                           Id = 1,
-                           Name = "Test User A"
-                        },
-                        CreatedDate = DateTime.Now,
-                        Content = "Hello User A"
-                    }
-                    
-                });
             var messageController = new MessageController(_messageRepositoryMock.Object, _userRepositoryMock.Object,  _mapper);
+            
             // Act
             var conversation = await messageController.GetConversation(1,2);
+            var result = conversation.Result as OkObjectResult;
+            
             // Assert
-            Assert.AreEqual(2, conversation.Messages.Count );
-
+            Assert.AreEqual(Seed_ListWithSpec.Count(), (result!.Value as MessagesDto)!.Messages.Count );
         }
     }
 
