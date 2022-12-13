@@ -39,36 +39,57 @@ public class MessageController : ControllerBase
     [HttpPost("create")]
         public async Task<ActionResult<string>> CreateMessage([FromQuery] int senderId, [FromQuery] int receiverId, [FromQuery] string content)
         {
-            User sender = await _userRepository.GetByIdAsync(id: senderId); 
-            User receiver = await _userRepository.GetByIdAsync(receiverId); 
-
-            if (sender == null) return BadRequest("sender user not found");
-            if (receiver == null) return BadRequest("receiver user not found");
+            var userResult = await getUsers(new int[]{senderId, receiverId});
+            if (userResult.userIdsNotFound.Any()){
+                return BadRequest("Unable to find the user for id: " + string.Join(",", userResult.userIdsNotFound));
+            }
 
             var message = new Message {
-                Sender = sender,
-                Receiver = receiver,
+                Sender = userResult.users.Where(x => x.Id == senderId).FirstOrDefault(),
+                Receiver = userResult.users.Where(x => x.Id == receiverId).FirstOrDefault(),
                 CreatedDate = DateTime.Now,
                 Content = string.IsNullOrEmpty(content) ? "" : content
             };
             
             var numberOfAddedEntities = await _messageRepository.CreateAsync(message);
             var uploadSuccessfull = numberOfAddedEntities > 0;
-            if (uploadSuccessfull) return "Message Created Successfully";            
+            if (uploadSuccessfull) return Ok("Message Created Successfully");            
             return BadRequest("Problem creating Message");
         }
 
+    private async Task<(List<User> users, List<int> userIdsNotFound)> getUsers(int[] UserIds)
+    {
+        var userIdsNotFound = new List<int>();
+        var users = new List<User>{};
+        
+        foreach(int userId in UserIds){
+            User user = await _userRepository.GetByIdAsync(id: userId); 
+            
+            if (user == null) userIdsNotFound.Add(userId);
+            users.Add(user!);
+        }
+        
+        return (users : users, userIdsNotFound : userIdsNotFound);
+
+    }
+
     [HttpGet("conversation")]
-    public async Task<MessagesDto> GetConversation([FromQuery] int userA, [FromQuery] int userB)
+    public async Task<ActionResult<MessagesDto>> GetConversation([FromQuery] int userA, [FromQuery] int userB)
         {
+            
+            var userResult = await getUsers(new int[]{userA, userB});
+            if (userResult.userIdsNotFound.Any()){
+                return BadRequest("Unable to find the user for id: " + string.Join(",", userResult.userIdsNotFound));
+            }
+
             var spec = new MessageFilter_UsersConversation(userA, userB);
             var messages = await _messageRepository.ListWithSpec(spec);
             
             var messageDtos = _mapper.Map<ICollection<MessageDto >>(messages);
-            return new MessagesDto
+            return Ok(new MessagesDto
             {
                 Messages = messageDtos
-            };
+            });
         }
 
 }
