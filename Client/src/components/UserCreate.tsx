@@ -39,7 +39,7 @@ function UserCreate() {
         <br />
         <h4>Creating User: {name}</h4>
         <button onClick={logPost}>Post User</button>
-        {data && <div> {data} </div>}
+        {data && <div> {data.posts[1].id} </div>}
       </div>
     </>
   );
