@@ -1,0 +1,17 @@
+.UserProfiles {
+  background-color: rgb(182, 182, 182);
+  margin: 10px;
+  width: 200px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+.OneUserProfile {
+  margin: auto;
+}
+.OneUserProfile img {
+  width: 100%;
+}
+.UserInformation {
+  text-align: center;
+}

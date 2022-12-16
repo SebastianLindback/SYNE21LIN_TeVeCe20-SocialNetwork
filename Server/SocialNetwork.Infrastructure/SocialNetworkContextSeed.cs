@@ -21,7 +21,7 @@ namespace SocialNetwork.Infrastructure
                         }
                     }
                 };
-                
+
                 var user2 = new User
                 {
                     Name = "Jonny Cage ",
@@ -37,34 +37,36 @@ namespace SocialNetwork.Infrastructure
 
                 await context.Users.AddRangeAsync(user);
                 await context.Users.AddRangeAsync(user2);
-                
+
                 await context.SaveChangesAsync();
             }
 
-             if (!context.Subscriptions.Any())
+            if (!context.Subscriptions.Any())
             {
 
                 var subscription = new Subscription
                 {
                     Id = 1,
-                    SubscribedTo = new User{ 
-                    Name = "Robert Jansz"
+                    SubscribedTo = new User
+                    {
+                        Name = "Robert Jansz"
                     },
-                
-                  
-                    Subscriber = new User{ 
-                    Name = "Jonny Cage "
+
+
+                    Subscriber = new User
+                    {
+                        Name = "Jonny Cage "
                     },
-                  
+
                     CreatedDate = DateTime.Now
                 };
 
-               
-                
-                
+
+
+
 
                 await context.Subscriptions.AddRangeAsync(subscription);
-                
+
                 await context.SaveChangesAsync();
             }
         }
