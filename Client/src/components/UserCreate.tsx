@@ -1,6 +1,7 @@
 import Agent from "../actions/Agent";
 import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  Link,
   useAsyncValue,
   useFetcher,
   useMatch,
@@ -9,6 +10,7 @@ import {
 import { User } from "../models/User";
 import React, { useState } from "react";
 import { UsersResponse } from "../models/UsersResponse";
+import { displayValue } from "@tanstack/react-query-devtools/build/lib/utils";
 
 function UserCreate() {
   const [name, setName] = useState("");
@@ -24,12 +26,13 @@ function UserCreate() {
   const [data, setData] = useState<UsersResponse>();
 
   const logPost = async () => {
-    var result = await Agent.Users.User(name);
+    var result = await Agent.Users.All().then((response) => response);
     setData(result);
   };
 
   return (
     <>
+      <link rel="stylesheet" href={require("./style.css")} />
       <div className="CreateUserForm">
         <input onChange={nameInput} placeholder="First and Last Name" />
         <br />
@@ -37,11 +40,41 @@ function UserCreate() {
         <button onClick={logName}>Create User</button>
         <br />
         <br />
-        <h4>Creating User: {name}</h4>
         <button onClick={logPost}>Post User</button>
-        {data && <div> {data.posts[1].id} </div>}
+        <br />
+        <br />
+        {data && (
+          <li className="media bg-white text-dark p-4 mb-4 border rounded">
+            <div className="">
+              <p className="">
+                {data.users.map((x) => (
+                  <div className="UserProfiles">
+                    <div className="OneUserProfile">
+                      {" "}
+                      <br />{" "}
+                      <img
+                        className="mr-3 rounded-circle"
+                        src={require("./profile.png")}
+                      />
+                      <div className="UserInformation">
+                        <h4>
+                          {x.id} {x.name} <br />
+                        </h4>
+                        <button>Message</button> <button>Follow</button>
+                      </div>
+                    </div>
+                    <br></br>{" "}
+                  </div>
+                ))}
+              </p>
+            </div>
+          </li>
+        )}
       </div>
     </>
   );
 }
 export default UserCreate;
+
+{
+}
