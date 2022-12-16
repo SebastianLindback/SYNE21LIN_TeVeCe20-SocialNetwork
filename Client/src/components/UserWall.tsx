@@ -40,15 +40,15 @@ const Wall = () => {
                     </div>
                     <div className="float-right p-4">
                         <button type="button" className="btn btn-primary m-4">
-                            Posts <span className="badge badge-light">{data?.posts.length}</span>
+                            Posts <span className="badge badge-light">{data?.posts?.length}</span>
                         </button>
-                        <button type="button" className="btn btn-success m-4">
-                            Follow
-                        </button>
+                        <a href="https://localhost:7064/api/subscription/follow?Subscriber=2&SubscribedTo=3" target="_blank" rel="noreferrer">
+              <button>Follow</button>
+            </a>
                     </div>
                     <div className="clearfix"></div>
                     <ul className="list-unstyled  p-3 mb-2">
-                        {data && data.posts.map((post) => (
+                        {data && data.posts?.map((post) => (
                             <li className="media bg-white text-dark p-4 mb-4 border rounded" key={post.id}>
                                 <img className="mr-3 rounded-circle" src={`https://i.pravatar.cc/75?=${post.userId}`} alt="{post.message}" />
                                 <div className="media-body">
