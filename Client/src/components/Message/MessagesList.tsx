@@ -11,7 +11,7 @@ interface props {
 const MessagesList = ({response} : props) => {
     
     return <>
-    {response! && response.messages.map((message) => (
+    {response! && response.messages?.map((message) => (
         <div className='card col-6 mx-auto m-5 ' key={response.messages.indexOf(message)} >
                 <div className='card-header mt-3 row'>
                     <p className='card-title col-6'>From: <a href={`${process.env.PUBLIC_URL}/user/${message.senderId}`}>{message.sender}</a> </p>

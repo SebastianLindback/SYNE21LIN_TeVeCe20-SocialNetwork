@@ -21,7 +21,7 @@ const router = createBrowserRouter([
     element: <UserWall />,
   },    
   {
-    path: "messages/:userAId/:userBId",
+    path: "conversation/:userAId/:userBId",
     element: <Messages />,
   },
   {

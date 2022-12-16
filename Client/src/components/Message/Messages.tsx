@@ -42,11 +42,12 @@ const Messages = () => {
         </div>
     );
 
-    var isNewConversation = data.messages.length === 0;
+    var isNewConversation = data?.messages?.length === 0;
+    var nameOfRecipient = data?.usersInConversation && data!.usersInConversation!.find(x => x.id === +userBId!)!.name!;
     if (isNewConversation){
         return <>
             <MessageReply 
-            title={`Start a new conversation with ${data!.usersInConversation!.find(x => x.id === +userBId!)!.name}`} 
+            title={`Start a new conversation with ${nameOfRecipient && nameOfRecipient}`} 
             buttonText={"Send"}
             queryKey={queryKey}/>
         </>
@@ -54,7 +55,7 @@ const Messages = () => {
 
     return <>
         <MessageReply 
-        title={`Continue your conversation with ${data!.usersInConversation!.find(x => x.id === +userBId!)!.name}`} 
+        title={`Continue your conversation with ${nameOfRecipient && nameOfRecipient}`} 
         buttonText={"Reply"}
         queryKey={queryKey}/>
         
