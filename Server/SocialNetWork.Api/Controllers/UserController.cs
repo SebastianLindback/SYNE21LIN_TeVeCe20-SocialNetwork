@@ -48,7 +48,7 @@ namespace SocialNetwork.Api.Controllers
             var uploadSuccessfull = await _userRepository.CreateAsync(newUser);
             if (uploadSuccessfull > 0)
             {
-                return Ok("user created");
+                return Ok("User created");
             }
             return BadRequest("Issue creating new user");
         }
