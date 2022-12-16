@@ -37,21 +37,26 @@ public class MessageController : ControllerBase
         };
     }
     [HttpPost("create")]
-        public async Task<ActionResult<string>> CreateMessage([FromQuery] int senderId, [FromQuery] int receiverId, [FromQuery] string content)
+        public async Task<ActionResult<string>> CreateMessage([FromBody] MessageDto message)
         {
+            var senderId = message.SenderId;
+            var receiverId = message.ReceiverId;
+            var content = message.Content;
+
             var userResult = await getUsers(new int[]{senderId, receiverId});
             if (userResult.userIdsNotFound.Any()){
                 return BadRequest("Unable to find the user for id: " + string.Join(",", userResult.userIdsNotFound));
             }
 
-            var message = new Message {
-                Sender = userResult.users.Where(x => x.Id == senderId).FirstOrDefault(),
-                Receiver = userResult.users.Where(x => x.Id == receiverId).FirstOrDefault(),
-                CreatedDate = DateTime.Now,
-                Content = string.IsNullOrEmpty(content) ? "" : content
-            };
+            var numberOfAddedEntities = await _messageRepository.CreateAsync(
+                new Message {
+                    Sender = userResult.users.Where(x => x.Id == senderId).FirstOrDefault(),
+                    Receiver = userResult.users.Where(x => x.Id == receiverId).FirstOrDefault(),
+                    CreatedDate = DateTime.Now,
+                    Content = string.IsNullOrEmpty(content) ? "" : content
+                }
+            );
             
-            var numberOfAddedEntities = await _messageRepository.CreateAsync(message);
             var uploadSuccessfull = numberOfAddedEntities > 0;
             if (uploadSuccessfull) return Ok("Message Created Successfully");            
             return BadRequest("Problem creating Message");
@@ -74,7 +79,7 @@ public class MessageController : ControllerBase
     }
 
     [HttpGet("conversation")]
-    public async Task<ActionResult<MessagesDto>> GetConversation([FromQuery] int userA, [FromQuery] int userB)
+    public async Task<ActionResult<MessageConversationDto>> GetConversation([FromQuery] int userA, [FromQuery] int userB)
         {
             
             var userResult = await getUsers(new int[]{userA, userB});
@@ -86,9 +91,12 @@ public class MessageController : ControllerBase
             var messages = await _messageRepository.ListWithSpec(spec);
             
             var messageDtos = _mapper.Map<ICollection<MessageDto >>(messages);
-            return Ok(new MessagesDto
+            var usersInConversationDto = _mapper.Map<ICollection<UserName_UserIdDto >>(userResult.users);
+            return Ok(new MessageConversationDto
             {
-                Messages = messageDtos
+                Messages = messageDtos,
+                UsersInConversation = usersInConversationDto
+
             });
         }
 
