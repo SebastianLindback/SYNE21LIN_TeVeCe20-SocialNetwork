@@ -42,7 +42,7 @@ const Wall = () => {
           <div className="float-right p-4">
             <button type="button" className="btn btn-primary m-4">
               Posts{" "}
-              <span className="badge badge-light">{data?.posts.length}</span>
+              <span className="badge badge-light">{data?.posts?.length}</span>
             </button>
             <button type="button" className="btn btn-success m-4">
               Follow
@@ -51,7 +51,7 @@ const Wall = () => {
           <div className="clearfix"></div>
           <ul className="list-unstyled  p-3 mb-2">
             {data &&
-              data.posts.map((post) => (
+              data.posts?.map((post) => (
                 <li
                   className="media bg-white text-dark p-4 mb-4 border rounded"
                   key={post.id}
