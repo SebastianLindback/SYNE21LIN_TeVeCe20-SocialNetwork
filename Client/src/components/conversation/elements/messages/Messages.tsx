@@ -1,14 +1,11 @@
-import Agent from '../../actions/Agent';
-import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom';
 import Moment from 'moment';
-import { MessagesResponse } from '../../models/MessagesResponse';
+import { MessagesResponse } from '../../../../models/MessagesResponse';
 
 interface props {
     response : MessagesResponse
 }
 
-const MessagesList = ({response} : props) => {
+const Messages = ({response} : props) => {
     
     return <>
     {response! && response.messages?.map((message) => (
@@ -29,4 +26,4 @@ const MessagesList = ({response} : props) => {
     )}</>
 }
 
-export default MessagesList;
+export default Messages;
