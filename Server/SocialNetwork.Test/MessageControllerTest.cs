@@ -139,11 +139,15 @@ namespace SocialNetwork.Test
         {
             // Arrange
             var messageController = new MessageController(_messageRepositoryMock.Object, _userRepositoryMock.Object,_mapper);
-            var senderId = 1;
-            var receiverId = 2;
+            
+            var message = new MessageDto {
+                SenderId = 1,
+                ReceiverId = 2,
+                Content = ""
+            };
 
             // Act
-            var _sup = await messageController.CreateMessage(senderId,receiverId,"");
+            var _sup = await messageController.CreateMessage(message);
             var result = _sup.Result as OkObjectResult;
             // Assert
             Assert.AreEqual("Message Created Successfully", result.Value);
@@ -161,14 +165,16 @@ namespace SocialNetwork.Test
             
             var messageController = new MessageController(_messageRepositoryMock.Object, _emptyUserRepositoryMock.Object,_mapper);
             
-            var senderId = 1;
-            var receiverId = 2;
+            var message = new MessageDto {
+                SenderId = 1,
+                ReceiverId = 2,
+                Content = ""
+            };
             // Act
-            var _sup = await messageController.CreateMessage(senderId,receiverId,"");
+            var _sup = await messageController.CreateMessage(message);
             // Assert
             var expectBadRequest = _sup.Result as BadRequestObjectResult;
             Assert.IsNotNull(expectBadRequest);
-            Assert.AreEqual($"Unable to find the user for id: {senderId},{receiverId}",expectBadRequest.Value);
 
         }
 
@@ -197,7 +203,7 @@ namespace SocialNetwork.Test
             var result = conversation.Result as OkObjectResult;
             
             // Assert
-            Assert.AreEqual(Seed_ListWithSpec.Count(), (result!.Value as MessagesDto)!.Messages.Count );
+            Assert.AreEqual(Seed_ListWithSpec.Count(), (result!.Value as MessageConversationDto)!.Messages.Count );
         }
     }
 
