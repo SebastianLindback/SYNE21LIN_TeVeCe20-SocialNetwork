@@ -1,9 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import Agent from "../../../../actions/Agent";
-import { Message } from "../../../../models/Message";
-
+import useSendMessage from "../../hooks/useSendMessage";
 interface props {
     title : string,
     buttonText : string,
@@ -13,30 +10,24 @@ interface props {
 const Reply = ({title, buttonText, queryKey} : props) => {
     const { userAId, userBId } = useParams<{ userAId: string, userBId: string }>(); 
     const [content, setContent] = useState("")
+    const {mutate : sendMessage} = useSendMessage({queryKey})
     
-    const queryClient = useQueryClient();
-    
-    const mutation = useMutation(() => {
-        var message : Partial<Message> = {
+    const submitMessage = () => {
+        sendMessage({
             senderId : +userAId!,
             receiverId : +userBId!,
             content : content
-        }
-        return Agent.Messages.Send(message)
         },
         {
             onSuccess : () => {
-                queryClient.invalidateQueries(queryKey);
-                queryClient.refetchQueries(queryKey);
+                setContent("");
             }
-        }
-    );
+        });
+        
+    };
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setContent(event.target.value);
-    };
-    const submitMessage = () => {
-        mutation.mutate()
     };
 
     return <>
