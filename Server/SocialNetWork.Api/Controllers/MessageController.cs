@@ -39,25 +39,21 @@ public class MessageController : ControllerBase
     [HttpPost("create")]
         public async Task<ActionResult<string>> CreateMessage([FromBody] MessageDto message)
         {
-            var senderId = message.SenderId;
-            var receiverId = message.ReceiverId;
-            var content = message.Content;
-
-            var userResult = await getUsers(new int[]{senderId, receiverId});
+            var userResult = await getUsers(new int[]{message.SenderId, message.ReceiverId});
             if (userResult.userIdsNotFound.Any()){
                 return BadRequest("Unable to find the user for id: " + string.Join(",", userResult.userIdsNotFound));
             }
 
-            var numberOfAddedEntities = await _messageRepository.CreateAsync(
+            var numberOfAddedMessages = await _messageRepository.CreateAsync(
                 new Message {
-                    Sender = userResult.users.Where(x => x.Id == senderId).FirstOrDefault(),
-                    Receiver = userResult.users.Where(x => x.Id == receiverId).FirstOrDefault(),
+                    Sender = userResult.users.Where(x => x.Id == message.SenderId).FirstOrDefault(),
+                    Receiver = userResult.users.Where(x => x.Id == message.ReceiverId).FirstOrDefault(),
                     CreatedDate = DateTime.Now,
-                    Content = string.IsNullOrEmpty(content) ? "" : content
+                    Content = string.IsNullOrEmpty(message.Content) ? "" : message.Content
                 }
             );
             
-            var uploadSuccessfull = numberOfAddedEntities > 0;
+            var uploadSuccessfull = numberOfAddedMessages > 0;
             if (uploadSuccessfull) return Ok("Message Created Successfully");            
             return BadRequest("Problem creating Message");
         }
@@ -84,11 +80,11 @@ public class MessageController : ControllerBase
             
             var userResult = await getUsers(new int[]{userA, userB});
             if (userResult.userIdsNotFound.Any()){
-                return BadRequest("Unable to find the user for id: " + string.Join(",", userResult.userIdsNotFound));
+                return BadRequest("Unable to find the user for id: " + string.Join(separator: ",", userResult.userIdsNotFound));
             }
 
             var spec = new MessageFilter_UsersConversation(userA, userB);
-            var messages = await _messageRepository.ListWithSpec(spec);
+            var messages = await _messageRepository.ListWithSpec(spec: spec);
             
             var messageDtos = _mapper.Map<ICollection<MessageDto >>(messages);
             var usersInConversationDto = _mapper.Map<ICollection<UserName_UserIdDto >>(userResult.users);
