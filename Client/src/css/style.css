@@ -1,0 +1,46 @@
+.wrapper{
+    background-color: rgb(23, 0, 47);
+    position: relative;
+    bottom: 20px;
+    padding: 10px 40px;
+    border-bottom-left-radius: 10em 5em;
+    border-bottom-right-radius: 10em 5em;
+    margin-bottom: 10px;
+    box-shadow: 0px 20px 15px rgba(0, 0, 0, 0.236);
+}
+.wrapper h1{
+    color: white;
+}
+body{
+    background-image:url("../photos/wallpaper.jpg");
+    background-size: cover;
+    animation: none;
+}
+.Logo{
+    width: 80px;
+    height: 100%;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+.wrapper{
+    display: flex;
+    margin-top: 20px;
+}
+strong{
+    color: rgb(255, 98, 0);
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background-color: rgb(23, 0, 47);
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: white;
+  }

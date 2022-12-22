@@ -1,0 +1,56 @@
+.MessageReply {
+    width: 80%;
+    margin: auto;
+    margin-top: 40px;
+}
+.ProfileInfo{
+    display: flex;
+}
+.ProfileInfo h2{
+    color: white;
+    margin: 30px 0 0 20px;
+    font-weight: 700;
+}
+.btn{
+    background-color: #5200af;
+    border: none;
+}
+.ProfileInfo button{
+    margin: 25px 20px 0 40px;
+    background-color: rgb(255, 98, 0);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 22px;
+}
+.card{
+    background-color: rgb(23, 0, 47);
+    border-radius: 20px 20px 0 0;
+    padding: 20px 40px;
+    padding-bottom: 40px;
+    border-bottom: solid white 7px;
+}
+.card p{
+    color: white;
+    font-size: 20px;
+    text-align: center;
+}
+.card button{
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    width: 150px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.card textarea{
+    border-radius: 20px;
+    padding: 10px;
+    font-size: 20px;
+    height: 200px;
+}
+.col-6{
+    max-width: 100%;
+}

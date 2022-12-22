@@ -6,7 +6,7 @@ import Wall from "./components/Wall";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import UserWall from "./components/UserWall";
 import UserCreate from "./components/UserCreate";
-import Messages from './components/Message/Messages';
+import Messages from "./components/Message/Messages";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
   {
     path: "user/:userId",
     element: <UserWall />,
-  },    
+  },
   {
     path: "conversation/:userAId/:userBId",
     element: <Messages />,
@@ -32,13 +32,25 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <div className="container">
-      <h1 className="display-1 center">Social Network</h1>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </div>
+    <>
+      <link rel="stylesheet" href={require("./css/style.css")} />
+      <div className="container">
+        <div className="wrapper">
+          <img
+            className="Logo"
+            src={require("./photos/SocialMediaLogo.png")}
+            alt=""
+          />
+          <h1 className="display-1 center">
+            Lazy<strong>Book</strong>
+          </h1>
+        </div>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </div>
+    </>
   );
 }
 
