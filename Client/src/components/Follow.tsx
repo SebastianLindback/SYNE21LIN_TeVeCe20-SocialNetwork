@@ -7,7 +7,7 @@ interface props {
     toUser : string
 }
 
-function Follow({fromUser = "0", toUser} : props) {
+function Follow({fromUser = "1", toUser} : props) {
     enum btnStates {
         neutral = "primary",
         success = "success",
@@ -25,7 +25,7 @@ function Follow({fromUser = "0", toUser} : props) {
         }
     });
     return (
-        <button type="button" disabled={!btnStates.neutral ? true : false } onClick={() => subscribeToUser()} className={`btn btn-${followState} m-4`}>
+        <button type="button" disabled={btnStates.neutral ? false : true } onClick={() => subscribeToUser()} className={`btn btn-${followState} m-4`}>
             {followState === btnStates.neutral ? "Follow" : null}
             {followState === btnStates.success ? "Followed" : null}
             {followState === btnStates.error ? "Issue" : null}
