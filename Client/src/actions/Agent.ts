@@ -6,6 +6,7 @@ import { UsersResponse } from "../models/UsersResponse";
 import { MessagesResponse } from '../models/MessagesResponse'
 import { MessageResponse } from '../models/MessageResponse'
 import { Message } from '../models/Message'
+import { SubscribersResponse } from '../models/SubscribersResponse';
 
 axios.defaults.baseURL = "https://localhost:7064/api";
 
@@ -43,6 +44,7 @@ const Messages = {
 
 const Subscription = {
   Subscribe: (Subscriber?: string, SubscribedTo?: string) => requests.get<MessagesResponse>(`/subscription/follow/?Subscriber=${Subscriber}&SubscribedTo=${SubscribedTo}`),
+  All: (Fromuser?: string) => requests.get<SubscribersResponse>(`/subscription/GetSubscriptions?userId=${Fromuser}`),
 }
 
 const Agent = {
