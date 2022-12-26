@@ -34,16 +34,22 @@ const Users = {
     requests.get<UsersResponse>(`/user/create?Name=${name}`),
   Send: (post: Post) => requests.post<UsersResponse>("/user", post),
 };
-  const Messages = {
-    All: (params?: URLSearchParams) => requests.get<MessagesResponse>('/message', params),
-    Conversation: (userA?: string, userB?: string) => requests.get<MessagesResponse>(`/message/conversation/?userA=${userA}&userB=${userB}`),
-    Send: (message : Partial<Message>) => requests.post<MessageResponse>('/message/create', message),
-  }
+
+const Messages = {
+  All: (params?: URLSearchParams) => requests.get<MessagesResponse>('/message', params),
+  Conversation: (userA?: string, userB?: string) => requests.get<MessagesResponse>(`/message/conversation/?userA=${userA}&userB=${userB}`),
+  Send: (message : Partial<Message>) => requests.post<MessageResponse>('/message/create', message),
+}
+
+const Subscription = {
+  Subscribe: (Subscriber?: string, SubscribedTo?: string) => requests.get<MessagesResponse>(`/subscription/follow/?Subscriber=${Subscriber}&SubscribedTo=${SubscribedTo}`),
+}
 
 const Agent = {
   Posts,
   Messages,
   Users,
+  Subscription
 };
 
 export default Agent;

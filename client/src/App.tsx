@@ -6,7 +6,7 @@ import Wall from "./components/Wall";
 import { createBrowserRouter, Link, RouterProvider } from "react-router-dom";
 import UserWall from "./components/UserWall";
 import UserCreate from "./components/UserCreate";
-import Messages from "./components/Message/Messages";
+import Conversation from "./components/conversation/Conversation";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -22,7 +22,7 @@ const router = createBrowserRouter([
   },
   {
     path: "conversation/:userAId/:userBId",
-    element: <Messages />,
+    element: <Conversation />,
   },
 ]);
 

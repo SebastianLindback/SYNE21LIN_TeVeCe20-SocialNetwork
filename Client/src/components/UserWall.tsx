@@ -2,6 +2,7 @@ import Agent from "../actions/Agent";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import Post from "./Post";
+import Follow from "./Follow";
 
 const Wall = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -44,9 +45,7 @@ const Wall = () => {
               Posts{" "}
               <span className="badge badge-light">{data?.posts?.length}</span>
             </button>
-            <button type="button" className="btn btn-success m-4">
-              Follow
-            </button>
+            <Follow toUser={userId!}/>
           </div>
           <div className="clearfix"></div>
           <ul className="list-unstyled  p-3 mb-2">
