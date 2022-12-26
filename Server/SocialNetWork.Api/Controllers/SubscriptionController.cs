@@ -45,13 +45,17 @@ namespace SocialNetwork.Api.Controllers
             };
         }
 
-          [HttpGet("GetSubscribtions")]
+          [HttpGet("GetSubscriptions")]
         public async Task<SubscriptionsDto> GetUserSubscriptions([FromQuery]int userId)
         {
             var spec = new Subscribe_Filter_GetUser_Subscribtions(userId);
            // var Subscriptions = await _subscriptionRepository.ListAllAsync();
            var Subscriptions = await _subscriptionRepository.ListWithSpec(spec);
            var subscriptionDtos = _mapper.Map<ICollection<SubscriptionDto>>(Subscriptions.OrderByDescending(x => x.CreatedDate));
+           subscriptionDtos.ToList().ForEach(async x => {
+            var user = await _userRepository.GetByIdAsync( x.SubscribedToId);
+            x.Name = user.Name;
+            });
             return new SubscriptionsDto
             {
                 Subscriptions = subscriptionDtos
