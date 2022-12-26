@@ -64,13 +64,31 @@ const Messages = () => {
   if (isNewConversation) {
     return (
       <>
-        <MessageReply
-          title={`Start a new conversation with ${
-            nameOfRecipient && nameOfRecipient
-          }`}
-          buttonText={"Send"}
-          queryKey={queryKey}
-        />
+        <link rel="stylesheet" href={require("./css/MessageStyle.css")} />
+        <div className="MessageReply">
+          <div className="ProfileInfo">
+            <div>
+              <img
+                className="mr-3 rounded-circle"
+                src={require("./css/profile.png")}
+              />
+            </div>
+            <div>
+              <h3>Message conversation with:</h3>
+              <h2>Johnny Cage</h2>
+            </div>
+            <div>
+              <button>Follow</button>
+            </div>
+          </div>
+          <MessageReply
+            title={`Start a new conversation with ${
+              nameOfRecipient && nameOfRecipient
+            }`}
+            buttonText={"Send"}
+            queryKey={queryKey}
+          />
+        </div>
       </>
     );
   }
@@ -87,6 +105,7 @@ const Messages = () => {
             />
           </div>
           <div>
+            <h3>Message conversation with:</h3>
             <h2>Johnny Cage</h2>
           </div>
           <div>
@@ -100,7 +119,6 @@ const Messages = () => {
           buttonText={"Reply"}
           queryKey={queryKey}
         />
-
         <MessagesList response={data} />
       </div>
     </>

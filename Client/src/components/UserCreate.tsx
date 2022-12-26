@@ -55,16 +55,18 @@ function UserCreate() {
               <br />
               <div className="UserInformation">
                 <h4>
-                  <img
-                    className="mr-3 rounded-circle"
-                    src={require("../photos/profile.png")}
-                  />
+                  <Link to={`/user/${x.id}`}>
+                    <img
+                      className="mr-3 rounded-circle"
+                      src={require("../photos/profile.png")}
+                    />
+                  </Link>
                   {x.name}
                   <div>
                     {/* Hårdkodad länk */}
-                    <a href="http://localhost:3000/conversation/1/2">
+                    <Link to={`/conversation/${x.id}/${x.id}`}>
                       <button id="MessageButton">Message</button>
-                    </a>
+                    </Link>
                     <button id="FollowButton">Follow</button>
                   </div>
                   <br />

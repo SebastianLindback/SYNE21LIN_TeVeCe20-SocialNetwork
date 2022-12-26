@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./App.css";
 import Wall from "./components/Wall";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Link, RouterProvider } from "react-router-dom";
 import UserWall from "./components/UserWall";
 import UserCreate from "./components/UserCreate";
 import Messages from "./components/Message/Messages";
@@ -14,7 +14,7 @@ const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Wall />,
+    element: <UserCreate />,
   },
   {
     path: "user/:userId",
@@ -23,10 +23,6 @@ const router = createBrowserRouter([
   {
     path: "conversation/:userAId/:userBId",
     element: <Messages />,
-  },
-  {
-    path: "user/create/:name",
-    element: <UserCreate />,
   },
 ]);
 
