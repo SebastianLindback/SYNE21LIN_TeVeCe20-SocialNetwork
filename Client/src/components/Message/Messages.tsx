@@ -1,11 +1,10 @@
 import Agent from "../../actions/Agent";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import MessageReply from "./MessageReply";
-import MessagesList from "./MessagesList";
+import MessageReply from "../conversation/elements/reply/Reply";
+import MessagesList from "../conversation/elements/messages/Messages";
 import { AxiosError } from "axios";
 import { MessagesResponse } from "../../models/MessagesResponse";
-
 const Messages = () => {
   const { userAId, userBId } = useParams<{
     userAId: string;
