@@ -1,0 +1,20 @@
+follow btn:
+cache state. kom ihåg om subscription finns. sebbe
+
+backend. tillåt inte flera likadana subscription Ezat
+
+follow list - implimentera Subcription knappen Patrik
+            - design 
+
+Create User - ladda om onClick. Mohammed
+
+Conversation-Message - updatera design. Patrik
+
+userCreate - message mellan 1 - X Ezat
+
+userCreate - lägg till follow knapp Mohammed
+
+Wall - ladda in users direkt och minimera user create sebbe
+
+ 
+
