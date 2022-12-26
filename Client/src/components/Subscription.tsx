@@ -19,7 +19,7 @@ console.log(subscriptionId);
 
   return (
     <>
-  <button onClick={showSubscribers}>Subscribe</button>
+  <button onClick={showSubscribers}>Show Subscriptions</button>
   {data && (<p className="">{data.subscriptions.map((x) => (x.subscriberId + " " + x.name))}</p>)}
     </>
   );
