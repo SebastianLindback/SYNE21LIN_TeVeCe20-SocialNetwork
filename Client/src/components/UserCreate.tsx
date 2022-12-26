@@ -32,49 +32,52 @@ function UserCreate() {
 
   return (
     <>
-      <link rel="stylesheet" href={require("./style.css")} />
+      <link rel="stylesheet" href={require("../css/UserStyle.css")} />
       <div className="CreateUserForm">
+        <h2>Create a new user</h2>
         <input onChange={nameInput} placeholder="First and Last Name" />
+        <button id="CreateUserButton" onClick={logName}>
+          Create User
+        </button>
         <br />
         <br />
-        <button onClick={logName}>Create User</button>
+        <button id="PostUserButton" onClick={logPost}>
+          Post User
+        </button>
+        <button id="FollowList">Follow List</button>
         <br />
         <br />
-        <button onClick={logPost}>Post User</button>
-        <br />
-        <br />
-        {data && (
-          <li className="media bg-white text-dark p-4 mb-4 border rounded">
-            <div className="">
-              <p className="">
-                {data.users.map((x) => (
-                  <div className="UserProfiles">
-                    <div className="OneUserProfile">
-                      {" "}
-                      <br />{" "}
-                      <img
-                        className="mr-3 rounded-circle"
-                        src={require("./profile.png")}
-                      />
-                      <div className="UserInformation">
-                        <h4>
-                          {x.id} {x.name} <br />
-                        </h4>
-                        <button>Message</button> <button>Follow</button>
-                      </div>
-                    </div>
-                    <br></br>{" "}
-                  </div>
-                ))}
-              </p>
-            </div>
-          </li>
-        )}
       </div>
+      {data && (
+        <div className="ss">
+          {data.users.map((x) => (
+            <div className="UserProfiles">
+              <br />
+              <div className="UserInformation">
+                <h4>
+                  <Link to={`/user/${x.id}`}>
+                    <img
+                      className="mr-3 rounded-circle"
+                      src={require("../photos/profile.png")}
+                    />
+                  </Link>
+                  {x.name}
+                  <div>
+                    {/* Hårdkodad länk */}
+                    <Link to={`/conversation/${x.id}/${x.id}`}>
+                      <button id="MessageButton">Message</button>
+                    </Link>
+                    <button id="FollowButton">Follow</button>
+                  </div>
+                  <br />
+                </h4>
+              </div>
+              <br></br>
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }
 export default UserCreate;
-
-{
-}

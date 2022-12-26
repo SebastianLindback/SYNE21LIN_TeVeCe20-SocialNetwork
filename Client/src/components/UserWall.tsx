@@ -58,7 +58,7 @@ const Wall = () => {
                 >
                   <img
                     className="mr-3 rounded-circle"
-                    src={`https://i.pravatar.cc/75?=${post.userId}`}
+                    src={`https://i.pravatar.cc/75?=${post.id}`}
                     alt="{post.message}"
                   />
                   <div className="media-body">
