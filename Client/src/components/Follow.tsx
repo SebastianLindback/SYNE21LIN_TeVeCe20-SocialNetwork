@@ -1,6 +1,7 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import Agent from '../actions/Agent'
 import { useState } from 'react';
+import { AxiosError } from 'axios';
 
 interface props {
     fromUser? : string,
@@ -8,29 +9,51 @@ interface props {
 }
 
 function Follow({fromUser = "1", toUser} : props) {
-    enum btnStates {
+    enum FollowStates {
         neutral = "primary",
         success = "success",
         error = "danger"
     }
-    const [followState, setFollowState] = useState(btnStates.neutral)
+    const [followState, setFollowState] = useState(FollowStates.neutral)
+    const [errorMessage, setErrorMessage] = useState("")
     const {mutate : subscribeToUser} = useMutation(() => { return Agent.Subscription.Subscribe(fromUser,toUser).then(res => res)},
     {
         onSuccess : () => {
-            setFollowState(btnStates.success)
+            setFollowState(FollowStates.success)
         },
-        onError : (data) => {
-            setFollowState(btnStates.error)
-            console.log(data);
+        onError : (error : AxiosError) => {
+            setFollowState(FollowStates.error)
+            setErrorMessage(error?.response!.data as string)
         }
     });
-    return (
-        <button type="button" disabled={btnStates.neutral ? false : true } onClick={() => subscribeToUser()} className={`btn btn-${followState} m-4`}>
-            {followState === btnStates.neutral ? "Follow" : null}
-            {followState === btnStates.success ? "Followed" : null}
-            {followState === btnStates.error ? "Issue" : null}
-        </button>
-    )
+
+    const { data : currentSubscription} = useQuery({
+        queryKey: [`current-sub-${fromUser}-${toUser}`],
+        queryFn: () => Agent.Subscription.All(fromUser).then((response) => response),
+    });
+
+    var currentlySubscribed = currentSubscription &&
+    currentSubscription.subscriptions.filter(subscription => subscription.subscribedToId === +toUser)?.length; 
+    if (currentlySubscribed && followState !== FollowStates.success) {        
+        setFollowState(FollowStates.success);
+    }
+
+    const buttonDesign = (btnText : string,btnColor : string,btnDisabled : boolean) => {
+        return (
+            <button type="button" 
+                    onClick={() => subscribeToUser()} 
+                    disabled={btnDisabled} 
+                    className={`btn btn-${btnColor} m-4`}
+            >
+            {btnText}
+            </button>
+        )
+    }
+    if (followState === FollowStates.success) return buttonDesign("Followed", FollowStates.success, true)
+
+    if (followState === FollowStates.error) return buttonDesign(errorMessage.length > 0 ? errorMessage : "Issue", FollowStates.error, true)
+
+    return buttonDesign("Follow", FollowStates.neutral, false)
 }
 
 export default Follow
