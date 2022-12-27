@@ -2,6 +2,7 @@ import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./App.css";
+import "./css/style.css";
 import Wall from "./components/Wall";
 import { createBrowserRouter, Link, RouterProvider } from "react-router-dom";
 import UserWall from "./components/UserWall";
@@ -15,7 +16,7 @@ const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <UserCreate />,
+    element: <Wall />,
   },
   {
     path: "user/:userId",
@@ -34,7 +35,6 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <link rel="stylesheet" href={require("./css/style.css")} />
       <div className="container">
         <div className="wrapper">
           <img

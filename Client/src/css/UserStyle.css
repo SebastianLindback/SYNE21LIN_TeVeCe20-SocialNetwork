@@ -58,6 +58,7 @@
   color: white;
   background-color: #5200af;
   box-shadow: 5px 10px 15px rgba(0, 0, 0, 0.236);
+  cursor: pointer;
 }
 
 #PostUserButton{

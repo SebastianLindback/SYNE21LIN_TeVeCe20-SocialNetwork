@@ -1,11 +1,14 @@
 import Agent from "../actions/Agent";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import "../css/UserStyle.css";
+import UserCreate from "./UserCreate";
 
 const Wall = () => {
+  const queryKey = ["wallData"];
   const { isLoading, error, data } = useQuery({
-    queryKey: ["wallData"],
-    queryFn: () => Agent.Posts.All().then((response) => response),
+    queryKey: queryKey,
+    queryFn: () => Agent.Users.All().then((response) => response),
   });
 
   if (isLoading)
@@ -28,47 +31,37 @@ const Wall = () => {
 
   return (
     <>
-      <div className="row bg-light text-dark rounded">
-        <div className="col-sm rounded">
-          <div className="clearfix"></div>
-          <ul className="list-unstyled  p-3 mb-2">
-            <form method="GET" action="https://localhost:7064/api/user/create">
-              <h4>Create a new user</h4>
-              <br></br>
-              <input
-                type="text"
-                id="Name"
-                name="Name"
-                placeholder="First and Last Name"
-              />
-              <br></br>
-              <br></br>
-              <input type="submit" value="Create" />
-              <br></br>
-              <br></br>
-            </form>
-            {data &&
-              data.posts.map((post) => (
-                <li
-                  className="media bg-white text-dark p-4 mb-4 border rounded"
-                  key={post.id}
-                >
-                  <Link to={`/user/${post.userId}`}>
+      <UserCreate queryKey={queryKey}/>
+      {data && (
+        <div className="ss">
+          {data.users.map((x) => (
+            <div className="UserProfiles">
+              <br />
+              <div className="UserInformation">
+                <h4>
+                  <Link to={`/user/${x.id}`}>
                     <img
                       className="mr-3 rounded-circle"
-                      src={`https://i.pravatar.cc/75?=${post.userId}`}
-                      alt="{post.message}"
+                      src={require("../photos/profile.png")}
+                      alt={`profile of ${x.name}`}
                     />
                   </Link>
-                  <div className="media-body">
-                    <p className="mt-0 mb-1 lead">{post.message}</p>
-                    <samp>{post.createdDate.toLocaleString()}</samp>
+                  {x.name}
+                  <div>
+                    {/* Hårdkodad länk */}
+                    <Link to={`/conversation/${x.id}/${x.id}`}>
+                      <button id="MessageButton">Message</button>
+                    </Link>
+                    <button id="FollowButton">Follow</button>
                   </div>
-                </li>
-              ))}
-          </ul>
+                  <br />
+                </h4>
+              </div>
+              <br></br>
+            </div>
+          ))}
         </div>
-      </div>
+      )}
     </>
   );
 };
