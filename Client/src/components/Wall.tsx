@@ -31,7 +31,7 @@ const Wall = () => {
 
   return (
     <>
-      <UserCreate queryKey={queryKey}/>
+      <UserCreate queryKey={queryKey} />
       {data && (
         <div className="ss">
           {data.users.map((x) => (
@@ -43,13 +43,13 @@ const Wall = () => {
                     <img
                       className="mr-3 rounded-circle"
                       src={require("../photos/profile.png")}
-                      alt={`profile of ${x.name}`}
+                      alt={`profile of x.name}`}
                     />
                   </Link>
                   {x.name}
                   <div>
                     {/* Hårdkodad länk */}
-                    <Link to={`/conversation/${x.id}/${x.id}`}>
+                    <Link to={`/conversation/1/${x.id}`}>
                       <button id="MessageButton">Message</button>
                     </Link>
                     <button id="FollowButton">Follow</button>
