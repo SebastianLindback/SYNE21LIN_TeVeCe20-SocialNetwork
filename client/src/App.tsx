@@ -3,12 +3,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./App.css";
 import "./css/style.css";
-import Wall from "./components/Wall";
+import Wall from "./pages/Wall";
 import { createBrowserRouter, Link, RouterProvider } from "react-router-dom";
-import UserWall from "./components/UserWall";
-import UserCreate from "./components/UserCreate";
-import Conversation from "./components/conversation/Conversation";
-import Subscription from "./components/Subscription";
+import UserWall from "./pages/UserWall";
+import UserCreate from "./pages/UserCreate";
+import Conversation from "./pages/conversation/Conversation";
+import Subscription from "./pages/Subscription";
 
 // Create a client
 const queryClient = new QueryClient();
