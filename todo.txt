@@ -8,7 +8,7 @@ follow list - implimentera Subcription knappen Patrik
 
 Create User - ladda om onClick. Mohammed
 
-Conversation-Message - updatera design. Patrik
+Conversation-Message - updatera design. Patrik 90% klar
 
 userCreate - message mellan 1 - X Ezat
 

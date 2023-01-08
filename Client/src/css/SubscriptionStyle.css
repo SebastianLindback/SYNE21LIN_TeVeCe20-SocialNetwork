@@ -1,0 +1,25 @@
+p{
+    color: white;
+    font-size: 25px;
+    margin-top: 30px;
+}
+.parent{
+    display: flex;
+    margin-top: 20px;
+    background-color: rgb(23, 0, 47);
+    padding: 20px;
+    width: 70%;
+    border-radius: 10px;
+}
+.followers h1{
+    color: white;
+    margin-top: 20px;
+    font-weight: 700;
+}
+.followers button{
+    height: 50px;
+    width: 120px;
+    margin-top: 25px;
+    
+}
+

@@ -11,8 +11,21 @@ import { User } from "../models/User";
 import React, { useState } from "react";
 import { UsersResponse } from "../models/UsersResponse";
 import { displayValue } from "@tanstack/react-query-devtools/build/lib/utils";
+import { SubscribersResponse } from "../models/SubscribersResponse";
 
 function UserCreate() {
+  const { subscriptionId } = useParams<{ subscriptionId: string }>();
+  console.log(subscriptionId);
+
+  const [follower, showData] = useState<SubscribersResponse>();
+
+  const showSubscribers = async () => {
+    var result = await Agent.Subscription.All(subscriptionId).then(
+      (response) => response
+    );
+    showData(result);
+  };
+
   const [name, setName] = useState("");
 
   const nameInput = (name: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +57,31 @@ function UserCreate() {
         <button id="PostUserButton" onClick={logPost}>
           Post User
         </button>
-        <button id="FollowList">Follow List</button>
+        <link rel="stylesheet" href={require("../css/SubscriptionStyle.css")} />
+        <button id="FollowList" onClick={showSubscribers}>
+          Show Subscriptions
+        </button>
+        {follower && (
+          <div className="followers">
+            <h1>People You Follow:</h1>
+            {follower.subscriptions.map((x) => (
+              <div className="parent">
+                <div className="child">
+                  {" "}
+                  <Link to={`/user/${x.id}`}>
+                    <img
+                      className="mr-3 rounded-circle"
+                      src={require("../photos/profile.png")}
+                    />
+                  </Link>
+                </div>
+                <div className="child">
+                  <p>{x.name}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
         <br />
         <br />
       </div>

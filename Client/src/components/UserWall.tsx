@@ -45,7 +45,7 @@ const Wall = () => {
               Posts{" "}
               <span className="badge badge-light">{data?.posts?.length}</span>
             </button>
-            <Follow toUser={userId!}/>
+            <Follow toUser={userId!} />
           </div>
           <div className="clearfix"></div>
           <ul className="list-unstyled  p-3 mb-2">
