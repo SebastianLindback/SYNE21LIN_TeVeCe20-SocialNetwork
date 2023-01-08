@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import Post from "./Post";
 import { SubscribersResponse } from "../models/SubscribersResponse";
-import { useState } from "react";
+import React, { useState } from "react";
 
 
 const Subscription = () => {

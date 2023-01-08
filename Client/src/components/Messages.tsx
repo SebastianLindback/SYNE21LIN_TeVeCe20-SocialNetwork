@@ -1,5 +1,6 @@
 import Moment from 'moment';
-import { MessagesResponse } from '../../../../models/MessagesResponse';
+import { MessagesResponse } from '../models/MessagesResponse';
+import React from 'react';
 
 interface props {
     response : MessagesResponse

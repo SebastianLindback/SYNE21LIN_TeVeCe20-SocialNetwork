@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import useSendMessage from "../../hooks/useSendMessage";
+import { SendMessage } from "../actions/useMessage";
+import React from "react";
 interface props {
     title : string,
     buttonText : string,
     queryKey: string[]
 }
 
-const Reply = ({title, buttonText, queryKey} : props) => {
+const ReplyForm = ({title, buttonText, queryKey} : props) => {
     const { userAId, userBId } = useParams<{ userAId: string, userBId: string }>(); 
     const [content, setContent] = useState("")
-    const {mutate : sendMessage} = useSendMessage({queryKey})
+    const {mutate : sendMessage} = SendMessage(queryKey)
     
     const submitMessage = () => {
         sendMessage({
@@ -41,4 +42,4 @@ const Reply = ({title, buttonText, queryKey} : props) => {
     </>
 }
 
-export default Reply;
+export default ReplyForm;

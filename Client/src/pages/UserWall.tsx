@@ -1,8 +1,9 @@
+import React from "react";
 import Agent from "../actions/Agent";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import Post from "./Post";
-import Follow from "./Follow";
+import SubscribeButton from "../components/SubscribeButton";
 
 const Wall = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -45,7 +46,7 @@ const Wall = () => {
               Posts{" "}
               <span className="badge badge-light">{data?.posts?.length}</span>
             </button>
-            <Follow toUser={userId!}/>
+            <SubscribeButton fromUser="1" toUser={userId!}/>
           </div>
           <div className="clearfix"></div>
           <ul className="list-unstyled  p-3 mb-2">

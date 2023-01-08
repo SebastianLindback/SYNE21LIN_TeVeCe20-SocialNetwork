@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import "../css/UserStyle.css";
 import UserCreate from "./UserCreate";
+import React from "react";
 
 const Wall = () => {
   const queryKey = ["wallData"];
