@@ -2,6 +2,7 @@ using API.Helpers;
 using Entity.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using SocialNetwork.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +12,9 @@ builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 // Add services to the container.
 builder.Services.AddControllers();
-
+builder.Services.AddControllers().AddNewtonsoftJson(options => {
+           options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; 
+      });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -20,6 +23,8 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
 });
+
+
 
 builder.Services.AddDbContext<SocialNetworkContext>(x =>
 {

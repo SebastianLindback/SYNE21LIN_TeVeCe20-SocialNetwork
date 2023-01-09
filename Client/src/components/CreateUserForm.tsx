@@ -24,7 +24,7 @@ function UserCreate() {
   const default_setting_error = {text:errorMessage, disabled: true, color: { backgroundColor: "red" } } as settings;
   
   const queryClient = useQueryClient();
-  const { mutate: createUser } = useMutation(() => { return Agent.Users.User(name).then(res => res) },
+  const { mutate: createUser } = useMutation(() => { return Agent.Users.Create(name).then(res => res) },
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["wallData"]);

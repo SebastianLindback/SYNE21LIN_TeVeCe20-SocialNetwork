@@ -7,8 +7,8 @@ using SocialNetwork.Entity;
 namespace SocialNetwork.Entity.Specification;
 public class UserFilter_GetUserPosts : BaseSpecification<User>
 {
-    public UserFilter_GetUserPosts(int id) : base(x => (
-        (x.Id == id)
+    public UserFilter_GetUserPosts(int[] ids) : base(x => (
+        (ids.Contains(x.Id))
         ))
     {
         IncludeMethod(x => x.Posts);

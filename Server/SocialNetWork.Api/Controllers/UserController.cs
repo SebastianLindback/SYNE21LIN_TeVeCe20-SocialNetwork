@@ -1,6 +1,8 @@
+using System.Security.Cryptography.X509Certificates;
 using AutoMapper;
 using Entity.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using SocialNetwork.Api.Dto;
 using SocialNetwork.Entity;
@@ -16,12 +18,17 @@ namespace SocialNetwork.Api.Controllers
         private readonly IGenericRepository<User> _userRepository;
         private readonly IMapper _mapper;
 
+        private readonly SocialNetworkContext _context;
+
         public UserController(
             IMapper mapper,
-            IGenericRepository<User> userRepository)
+            IGenericRepository<User> userRepository,
+            SocialNetworkContext context
+            )
         {
             _mapper = mapper;
             _userRepository = userRepository;
+            _context = context;
         }
 
         [HttpGet]
@@ -70,14 +77,16 @@ namespace SocialNetwork.Api.Controllers
             return BadRequest("Issue removing user");
         }
 
-        [HttpGet("posts")]
-        public async Task<List<ICollection<Post>>> GetPostsFromSubscribers([FromQuery] int userId)
+        [HttpPost("posts")]
+        public async Task<UsersDto> GetPostsFromSubscribers(int[] usersId)
         {
-            var spec = new UserFilter_GetUserPosts(userId);
-            var user = await _userRepository.ListWithSpec(spec);
-            var posts = user.Select(x => x.Posts).ToList();
-            //var postDto = _mapper.Map<PostDto>(user.First().Posts);
-            return posts;
+            var spec = new UserFilter_GetUserPosts(usersId);
+            var users = await _userRepository.ListWithSpec(spec);
+            var userDtos = _mapper.Map<ICollection<UserDto>>(users);
+            return new UsersDto
+            {
+                Users = userDtos
+            };
         }
 
     }

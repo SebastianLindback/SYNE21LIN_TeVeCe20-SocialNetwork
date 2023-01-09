@@ -7,6 +7,7 @@ import { MessagesResponse } from '../models/MessagesResponse'
 import { MessageResponse } from '../models/MessageResponse'
 import { Message } from '../models/Message'
 import { SubscribersResponse } from '../models/SubscribersResponse';
+import { User } from '../models/User';
 
 axios.defaults.baseURL = "https://localhost:7064/api";
 
@@ -31,7 +32,8 @@ const Posts = {
 const Users = {
   All: (params?: URLSearchParams) =>
     requests.get<UsersResponse>("/user", params),
-  User: (name?: string) =>
+  Posts: (usersId:number[]) => requests.post<UsersResponse>(`/user/posts/`, usersId),
+  Create: (name?: string) =>
     requests.get<UsersResponse>(`/user/create?Name=${name}`),
   Send: (post: Post) => requests.post<UsersResponse>("/user", post),
   Del: (userId: string) => requests.del<string>(`/user/delete/?id=${userId}`)
