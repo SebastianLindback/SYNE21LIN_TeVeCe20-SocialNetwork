@@ -18,18 +18,23 @@ namespace SocialNetwork.Api.Controllers
 
         private readonly IGenericRepository<User> _userRepository;
 
+        private readonly SocialNetworkContext _context;
+
 
         private readonly IMapper _mapper;
 
         public SubscriptionController(
            IGenericRepository<Subscription> subscriptionRepository,
            IGenericRepository<User> userRepository,
-            IMapper mapper
+           IMapper mapper,
+           SocialNetworkContext context
+            
         )
         {
             _subscriptionRepository = subscriptionRepository;
             _userRepository = userRepository;
             _mapper = mapper;
+            _context = context;
 
         }
 
@@ -50,9 +55,12 @@ namespace SocialNetwork.Api.Controllers
         public async Task<SubscriptionsDto> GetUserSubscriptions([FromQuery] int userId)
         {
             var spec = new Subscribe_Filter_GetUser_Subscribtions(userId);
-            // var Subscriptions = await _subscriptionRepository.ListAllAsync();
-            var Subscriptions = await _subscriptionRepository.ListWithSpec(spec);
-            var subscriptionDtos = _mapper.Map<ICollection<SubscriptionDto>>(Subscriptions.OrderByDescending(x => x.CreatedDate));
+            var subscriptions = await _subscriptionRepository.ListWithSpec(spec);
+            var distinctSubscriptions = subscriptions.DistinctBy(x => x.SubscribedToId).OrderByDescending(x => x.CreatedDate).ToList();
+            
+            
+
+            var subscriptionDtos = _mapper.Map<ICollection<SubscriptionDto>>(distinctSubscriptions);
             subscriptionDtos.ToList().ForEach(async x =>
             {
                 var user = await _userRepository.GetByIdAsync(x.SubscribedToId);
@@ -62,6 +70,25 @@ namespace SocialNetwork.Api.Controllers
             {
                 Subscriptions = subscriptionDtos
             };
+        }
+
+        [HttpDelete("delete")]
+        public async Task<ActionResult<string>> DeleteSubscriptions([FromQuery] int subscriberId,[FromQuery] int subscribedToId)
+        {
+            var deletedRecords = 0;
+            var spec = new Subscribe_Filter_GetSubscribtions(subscriberId, subscribedToId);
+            var subscriptions = await _subscriptionRepository.ListWithSpec(spec);
+            
+            foreach (var subscription in subscriptions)
+            {
+                deletedRecords += await _subscriptionRepository.RemoveEntryByIdAsync(subscription.Id);
+            }
+
+            if (deletedRecords != 0) return Ok("subscription removed");
+            
+            return BadRequest("no subscription removed");
+
+            
         }
 
         [HttpGet("follow")]
@@ -96,6 +123,8 @@ namespace SocialNetwork.Api.Controllers
             }
             return BadRequest("Issue creating subscription");
         }
+        
 
     }
+    
 }

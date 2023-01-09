@@ -3,4 +3,5 @@ export interface Post {
     message: string;
     createdDate: Date;
     userId: number;
+    userName: string;
 }

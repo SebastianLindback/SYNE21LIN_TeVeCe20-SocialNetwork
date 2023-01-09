@@ -19,6 +19,13 @@ namespace SocialNetwork.Infrastructure
             return await _context.Set<T>().FindAsync(id);
         }
 
+        public async Task<int> RemoveEntryByIdAsync(dynamic id)
+        {
+            var itemToRemove = await _context.Set<T>().FindAsync(id);
+            _context.Remove(itemToRemove);
+            return await _context.SaveChangesAsync();
+        }
+
         public async Task<IReadOnlyList<T>> ListAllAsync()
         {
             return await _context.Set<T>().ToListAsync();
@@ -43,5 +50,6 @@ namespace SocialNetwork.Infrastructure
         {
             return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
         }
+
     }
 }

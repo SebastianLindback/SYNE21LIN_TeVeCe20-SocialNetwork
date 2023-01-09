@@ -19,7 +19,8 @@ const Post = () => {
                 id: 0,
                 message: textAreaValue,
                 createdDate: new Date(),
-                userId: parseInt(userId ?? '0')
+                userId: parseInt(userId ?? '0'),
+                userName: ""
             });
         } 
         ,
@@ -35,10 +36,10 @@ const Post = () => {
         <>
             <div className="row rounded">
                 <div className="col-sm bg-light text-dark p-4 mb-4 rounded">
-                    <h2 className="display-2">Message</h2>
+                    <h2 className="display-2">Post</h2>
 
                     <div className="form-group ">
-                        <label>Send a message to the users wall</label>
+                        <label>Create a public post on this wall</label>
                         <textarea className="form-control form-control-lg"
                             id="message"
                             name="message"

@@ -53,5 +53,32 @@ namespace SocialNetwork.Api.Controllers
             return BadRequest("Issue creating new user");
         }
 
+        [HttpDelete("delete")]
+        public async Task<ActionResult<string>> DeleteUser([FromQuery] int id)
+        {
+            var userExist = await _userRepository.GetByIdAsync(id);
+            if (userExist == null)
+            {
+                return BadRequest("User does not exist");
+            }
+
+            var removedEntity = await _userRepository.RemoveEntryByIdAsync(userExist.Id);
+            if (removedEntity != 0)
+            {
+                return Ok("User removed");
+            }
+            return BadRequest("Issue removing user");
+        }
+
+        [HttpGet("posts")]
+        public async Task<List<ICollection<Post>>> GetPostsFromSubscribers([FromQuery] int userId)
+        {
+            var spec = new UserFilter_GetUserPosts(userId);
+            var user = await _userRepository.ListWithSpec(spec);
+            var posts = user.Select(x => x.Posts).ToList();
+            //var postDto = _mapper.Map<PostDto>(user.First().Posts);
+            return posts;
+        }
+
     }
 }

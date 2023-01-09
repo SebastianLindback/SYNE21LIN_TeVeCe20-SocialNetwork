@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using SocialNetwork.Api.Dto;
 using SocialNetwork.Entity;
+using SocialNetwork.Entity.Specification;
 
 namespace SocialNetwork.Api.Controllers
 {
@@ -30,6 +31,11 @@ namespace SocialNetwork.Api.Controllers
         {
             var posts = await _postRepository.ListAllAsync();
             var postDtos = _mapper.Map<ICollection<PostDto>>(posts.OrderByDescending(x => x.CreatedDate));
+            foreach (var postDto in postDtos)
+            {
+                var user = await _userRepository.GetByIdAsync(postDto.Id);
+                postDto.UserName = user.Name;
+            }
             return new PostsDto
             {
                 Posts = postDtos
@@ -44,6 +50,7 @@ namespace SocialNetwork.Api.Controllers
             return postDto;
         }
 
+
         [HttpPost]
         public async Task<PostDto> Post(PostDto postDto)
         {
@@ -57,5 +64,7 @@ namespace SocialNetwork.Api.Controllers
             
             return postCreatedDto;
         }
+
+        
     }
 }

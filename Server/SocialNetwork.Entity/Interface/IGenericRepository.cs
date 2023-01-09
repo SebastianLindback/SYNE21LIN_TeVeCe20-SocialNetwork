@@ -9,6 +9,8 @@ namespace Entity.Interfaces
 
         Task<T> GetByIdAsync(dynamic id);
 
+        Task<int> RemoveEntryByIdAsync(dynamic id);
+
         Task<int> CreateAsync(T entity);
         Task<IReadOnlyList<T>> ListWithSpec(ISpecification<T> spec);
 

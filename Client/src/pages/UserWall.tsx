@@ -2,8 +2,8 @@ import React from "react";
 import Agent from "../actions/Agent";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import Post from "./Post";
-import SubscribeButton from "../components/SubscribeButton";
+import Post from "../components/Post";
+import SubscribeButton from "../components/buttons/SubscribeButton";
 
 const Wall = () => {
   const { userId } = useParams<{ userId: string }>();

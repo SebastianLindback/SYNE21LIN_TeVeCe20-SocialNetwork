@@ -34,6 +34,7 @@ const Users = {
   User: (name?: string) =>
     requests.get<UsersResponse>(`/user/create?Name=${name}`),
   Send: (post: Post) => requests.post<UsersResponse>("/user", post),
+  Del: (userId: string) => requests.del<string>(`/user/delete/?id=${userId}`)
 };
 
 const Messages = {
@@ -45,6 +46,7 @@ const Messages = {
 const Subscription = {
   Subscribe: (Subscriber?: string, SubscribedTo?: string) => requests.get<MessagesResponse>(`/subscription/follow/?Subscriber=${Subscriber}&SubscribedTo=${SubscribedTo}`),
   All: (Fromuser?: string) => requests.get<SubscribersResponse>(`/subscription/GetSubscriptions?userId=${Fromuser}`),
+  Del: (Subscriber?: string, SubscribedTo?: string) => requests.del<string>(`/subscription/delete/?subscriberId=${Subscriber}&subscribedToId=${SubscribedTo}`)
 }
 
 const Agent = {

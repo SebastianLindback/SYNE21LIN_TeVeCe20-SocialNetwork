@@ -17,7 +17,7 @@
 .UserInformation button{
  float: right;
  margin: 0 20px 0 0;
- background-color: #5200af;
+ 
  color: white;
  border: none;
  padding: 10px;
@@ -26,8 +26,8 @@
  font-size: 20px;
 }
 
-.UserInformation #FollowButton{
-  background-color: rgb(255, 98, 0);
+.UserInformation #MessageButton{
+  background-color: #5200af;
 }
 
 .UserInformation h4{
@@ -49,7 +49,7 @@
   border: none;
 }
 
-.CreateUserForm #CreateUserButton, #PostUserButton, #FollowList{
+.CreateUserForm #CreateUserButton, #PostUserButton, .menuItem{
   padding: 20px 20px;
   font-size: 20px;
   border: none;
@@ -65,6 +65,6 @@
   background-color: #3d008d;
   margin-right: 20px;
 }
-#FollowList{
+.menuItem{
   background-color: rgb(255, 98, 0);
 }
