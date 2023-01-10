@@ -26,7 +26,7 @@ interface props {
 export default function SubscribeButton({fromUser, toUser, style } : props)
 {
     const queryClient = useQueryClient();
-    const querykeys = ["wallData", ["subscriptions-user_" + fromUser], [`current-sub-${fromUser}`]]
+    const querykeys = ["wallData", ["subscriptions-user_" + fromUser], [`current-sub-${fromUser}`], [`posts-from-subscriptions}`]]
 
     const [errorMessage, setErrorMessage] = useState("")
     const [followState, setFollowState] = useState<FollowStates>()
@@ -73,7 +73,7 @@ export default function SubscribeButton({fromUser, toUser, style } : props)
             setErrorMessage(error?.response!.data as string)
         }
     });
-    console.log(current_setting);
+    
     const onclick = debounce(() => followState === FollowStates.neutral ? subscribeToUser() : unSubscribeToUser(),200) ;
     return (
     

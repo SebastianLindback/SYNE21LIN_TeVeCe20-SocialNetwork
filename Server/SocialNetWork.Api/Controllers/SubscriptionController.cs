@@ -18,7 +18,6 @@ namespace SocialNetwork.Api.Controllers
 
         private readonly IGenericRepository<User> _userRepository;
 
-        private readonly SocialNetworkContext _context;
 
 
         private readonly IMapper _mapper;
@@ -26,15 +25,13 @@ namespace SocialNetwork.Api.Controllers
         public SubscriptionController(
            IGenericRepository<Subscription> subscriptionRepository,
            IGenericRepository<User> userRepository,
-           IMapper mapper,
-           SocialNetworkContext context
+           IMapper mapper
             
         )
         {
             _subscriptionRepository = subscriptionRepository;
             _userRepository = userRepository;
             _mapper = mapper;
-            _context = context;
 
         }
 
@@ -96,31 +93,22 @@ namespace SocialNetwork.Api.Controllers
         {
             var spec = new Subscribe_Filter_GetSubscribtions(Subscriber, SubscribedTo);
             var Subscriptions = await _subscriptionRepository.ListWithSpec(spec);
-            if (Subscriptions.Any())
-            {
-                return BadRequest(error: "Subscription already exist");
-            }
+            if (Subscriptions.Any()) return BadRequest(error: "Subscription already exist");
+
             var User = await _userRepository.GetByIdAsync(Subscriber);
             var Follower = await _userRepository.GetByIdAsync(SubscribedTo);
-            if (Follower == null)
-            {
-                return BadRequest(error: "User not found");
-            }
-            if (User == null)
-            {
-                return BadRequest(error: "User not found");
-            }
+            if (User == null) return BadRequest(error: "User not found");
+            if (Follower == null) return BadRequest(error: "User not found");
+
             var Subscription = new Subscription
             {
                 Subscriber = User,
                 SubscribedTo = Follower,
                 CreatedDate = DateTime.Now
             };
-            var Succeeding = await _subscriptionRepository.CreateAsync(Subscription);
-            if (Succeeding > 0)
-            {
-                return Ok("Subscribed successfull");
-            }
+            var uploadCount = await _subscriptionRepository.CreateAsync(Subscription);
+            if (uploadCount > 0) return Ok("Subscribed successfull");
+            
             return BadRequest("Issue creating subscription");
         }
         

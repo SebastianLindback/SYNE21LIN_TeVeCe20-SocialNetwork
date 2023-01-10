@@ -18,17 +18,13 @@ namespace SocialNetwork.Api.Controllers
         private readonly IGenericRepository<User> _userRepository;
         private readonly IMapper _mapper;
 
-        private readonly SocialNetworkContext _context;
-
         public UserController(
             IMapper mapper,
-            IGenericRepository<User> userRepository,
-            SocialNetworkContext context
+            IGenericRepository<User> userRepository
             )
         {
             _mapper = mapper;
             _userRepository = userRepository;
-            _context = context;
         }
 
         [HttpGet]
@@ -47,16 +43,12 @@ namespace SocialNetwork.Api.Controllers
         {
             var spec = new UserFilter_GetUserName(name);
             var userExist = await _userRepository.GetPropWithSpec(spec);
-            if (userExist != null)
-            {
-                return BadRequest("User already exists");
-            }
+            if (userExist != null) return BadRequest("User already exists");
+
             var newUser = new User { Name = name };
             var uploadSuccessfull = await _userRepository.CreateAsync(newUser);
-            if (uploadSuccessfull > 0)
-            {
-                return Ok("User created");
-            }
+            if (uploadSuccessfull > 0) return Ok("User created");
+            
             return BadRequest("Issue creating new user");
         }
 
@@ -64,16 +56,11 @@ namespace SocialNetwork.Api.Controllers
         public async Task<ActionResult<string>> DeleteUser([FromQuery] int id)
         {
             var userExist = await _userRepository.GetByIdAsync(id);
-            if (userExist == null)
-            {
-                return BadRequest("User does not exist");
-            }
-
+            if (userExist == null) return BadRequest("User does not exist");
+            
             var removedEntity = await _userRepository.RemoveEntryByIdAsync(userExist.Id);
-            if (removedEntity != 0)
-            {
-                return Ok("User removed");
-            }
+            if (removedEntity != 0) return Ok("User removed");
+            
             return BadRequest("Issue removing user");
         }
 

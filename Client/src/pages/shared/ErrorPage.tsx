@@ -5,7 +5,7 @@ interface props {
     error : AxiosError
 }
 
-const ConversationError = ({error} : props) => {
+const ErrorPage = ({error} : props) => {
 
     return (console.log(error),<>
         <div className="row rounded">
@@ -16,4 +16,4 @@ const ConversationError = ({error} : props) => {
     </>)
 }
 
-export default ConversationError;
+export default ErrorPage;

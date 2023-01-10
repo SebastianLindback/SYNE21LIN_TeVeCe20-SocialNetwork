@@ -5,8 +5,12 @@ import React from "react";
 import moment from "moment";
 import SubscribeButton from "../components/buttons/SubscribeButton";
 import { GetSubscription } from "../actions/useSubscription";
-import { Post } from "../models/Post";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { UsersResponse } from "../models/UsersResponse";
+import Heading from "../components/Heading";
+import NavMenu from "../components/NavMenu";
+import ErrorPage from "./shared/ErrorPage";
 
 const Wall = () => {
   const navigate = useNavigate()
@@ -14,23 +18,45 @@ const Wall = () => {
   const {currentSubscriptions} = GetSubscription("1");
   var ids = currentSubscriptions?.subscriptions.map(x => x.subscribedToId);  
 
-  const { data, error} = useQuery({
-      queryKey: [`posts-users${ids && ids.join(",")}`],
-      queryFn: () => ids && Agent.Users.Posts(ids!).then((response) => response),
+  const { data, error} = useQuery<UsersResponse, AxiosError>({
+      queryKey: ["posts-from-subscriptions"],
+      retry: () => false,
+      queryFn: () => Agent.Users.Posts(ids! && ids!)
   });
-  
-  console.log(data);
-  
-  if (error)
-    return (
-      <div className="row rounded">
-        <div className="col-sm bg-light text-dark p-4 mb-4 rounded">
-          An error has occurred: ' + error
-        </div>
-      </div>
-    );
 
-  const UIposts = data?.users?.map(user => (user.posts.map(post => 
+  if (error ) return (<div className="container">
+      {/* MENU */}
+      <NavMenu menuItems={[
+        {to:"/subscriptions/1", text:"My Subscriptions"},
+        {to:"/user/1", text:"My public wall"},
+        {to:"/explore", text:"Explore Users"},
+        {to:"/admin", text:"Admin"},
+      ]}/>
+
+      {/* HEADER */}
+      <Heading title="Your Wall" subtitle="Will display posts from your subscriptions"/>
+
+      {/* CONTENT */}
+      <ErrorPage error={error}/>
+    </div>
+  );  
+    
+  return (
+    <>
+    {/* MENU */}
+    <NavMenu menuItems={[
+        {to:"/subscriptions/1", text:"My Subscriptions"},
+        {to:"/user/1", text:"My public wall"},
+        {to:"/explore", text:"Explore Users"},
+        {to:"/admin", text:"Admin"},
+      ]}/>
+
+    {/* HEADER */}
+    <Heading title="Your Wall" subtitle="Will display posts from your subscriptions"/>
+
+    {/* CONTENT */}
+    <div className="row mx-auto" style={{maxWidth:"800px"}}>
+      {data && data?.users?.map(user => (user.posts.map(post => 
         
         <div className="row col-12 text-white UserInformation" key={post.id}>
           <div className="col-4">
@@ -55,18 +81,7 @@ const Wall = () => {
           </div>
         </div> 
         )
-      ))
-  
-    
-  return (
-    <>
-    <div className="row justify-content-around">
-      <button className="menuItem" onClick={() => {navigate("/subscriptions/1")}}>My Subscriptions</button>
-      <button className="menuItem" onClick={() => {navigate("/admin")}}>Admin</button>
-    </div>
-    <div className="row mx-auto" style={{maxWidth:"800px"}}>
-      {UIposts && UIposts
-      } 
+      ))} 
     </div>
     </>
   );

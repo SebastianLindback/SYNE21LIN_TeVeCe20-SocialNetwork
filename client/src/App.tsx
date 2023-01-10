@@ -6,10 +6,11 @@ import "./css/style.css";
 import Wall from "./pages/Wall";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import UserWall from "./pages/UserWall";
-import Conversation from "./pages/conversation/Conversation";
+import Conversation from "./pages/Conversation";
 import Subscriptions from "./pages/Subscriptions";
 import Admin from "./pages/Admin";
-import Layout from "./pages/Layout";
+import Layout from "./pages/shared/Layout";
+import Explore from "./pages/Explore";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
     {
       path: "/admin",
       element: <Admin />,
+    },
+    {
+      path: "/explore",
+      element: <Explore />,
     }
   ]
   }

@@ -1,10 +1,10 @@
 import React from "react";
 
 interface props {
-    failureCount : number
+    failureCount? : number
 }
 
-const ConversationLoading = ({failureCount} : props) => {
+const LoadingPage = ({failureCount} : props) => {
 
     return <>
         <div className="row rounded">
@@ -12,11 +12,11 @@ const ConversationLoading = ({failureCount} : props) => {
                 <span>
                     Loading...
                     <br />
-                    {failureCount > 1 && `Retrying... Number of failed requests: ${failureCount}`}
+                    {failureCount && failureCount > 1 && `Retrying... Number of failed requests: ${failureCount}`}
                 </span>
             </div>
         </div>
     </>
 }
 
-export default ConversationLoading;
+export default LoadingPage;

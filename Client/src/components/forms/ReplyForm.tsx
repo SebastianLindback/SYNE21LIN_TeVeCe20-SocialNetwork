@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { SendMessage } from "../actions/useMessage";
+import { SendMessage } from "../../actions/useMessage";
 import React from "react";
 interface props {
     title : string,

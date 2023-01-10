@@ -1,19 +1,19 @@
 import { useParams } from 'react-router-dom';
-import Messages from '../../components/Messages';
-import ConversationError from './ConversationError';
-import ConversationLoading from './ConversationLoading';
+import ErrorPage from './shared/ErrorPage';
+import LoadingPage from './shared/LoadingPage';
 import React from 'react';
-import { GetConversation } from '../../actions/useMessage';
-import ReplyForm from '../../components/ReplyForm';
+import { GetConversation } from '../actions/useMessage';
+import ReplyForm from '../components/forms/ReplyForm';
+import Messages from '../components/collections/Messages';
 
 const Conversation = () => {
     const { userAId, userBId } = useParams<{ userAId: string, userBId: string }>();
 
     const { isLoading, isError, error, data, failureCount, queryKey } = GetConversation( userAId!, userBId!);
 
-    if (isError) return (<ConversationError error={error!} />);
+    if (isError) return (<ErrorPage error={error!} />);
 
-    if (isLoading) return (<ConversationLoading failureCount={failureCount} />);
+    if (isLoading) return (<LoadingPage failureCount={failureCount} />);
 
     var nameOfRecipient = data?.usersInConversation && data!.usersInConversation!.find(x => x.id === +userBId!)!.name!;
     var isNewConversation = data?.messages?.length === 0;

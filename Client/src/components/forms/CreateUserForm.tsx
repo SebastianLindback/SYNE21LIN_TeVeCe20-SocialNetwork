@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Agent from "../actions/Agent";
-import "../css/UserStyle.css";
+import Agent from "../../actions/Agent";
+import "../../css/UserStyle.css";
 import React, { CSSProperties, useState } from "react";
+import { AxiosError } from "axios";
 
 enum btnStates {
   neutral = "neutral",
@@ -31,8 +32,8 @@ function UserCreate() {
         queryClient.refetchQueries(["wallData"]);
         setBtnState(btnStates.success);
       },
-      onError: (data : string) => {
-        setErrorMessage(data);
+      onError: (data : AxiosError) => {
+        setErrorMessage(data.message);
         setBtnState(btnStates.error);
       }
     });

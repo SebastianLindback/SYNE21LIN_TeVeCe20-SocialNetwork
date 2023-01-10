@@ -2,50 +2,35 @@ import React from "react";
 import Agent from "../actions/Agent";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import Post from "../components/Post";
 import SubscribeButton from "../components/buttons/SubscribeButton";
+import CreatePostForm from "../components/forms/CreatePostForm";
+import { PostsResponse } from "../models/PostsResponse";
+import { AxiosError } from "axios";
+import ErrorPage from "./shared/ErrorPage";
+import LoadingPage from "./shared/LoadingPage";
 
 const Wall = () => {
   const { userId } = useParams<{ userId: string }>();
 
-  const { isLoading, error, data } = useQuery({
+  const { isLoading, error, data } = useQuery<PostsResponse, AxiosError>({
     queryKey: ["UserWallData"],
-    queryFn: () => {
-      return Agent.Posts.User(userId).then((response) => response);
-    },
+    queryFn: () => Agent.Posts.User(userId).then((response) => response)
   });
 
-  if (isLoading)
-    return (
-      <div className="row rounded">
-        <div className="col-sm bg-light text-dark p-4 mb-4 rounded">
-          Loading...;
-        </div>
-      </div>
-    );
+  if (isLoading) return <div className="container"><CreatePostForm /><LoadingPage/></div>
 
-  if (error)
-    return (
-      <div className="row rounded">
-        <div className="col-sm bg-light text-dark p-4 mb-4 rounded">
-          An error has occurred: ' + error;
-        </div>
-      </div>
-    );
-
+  if (error) return (<div className="container"><CreatePostForm /><ErrorPage error={error}/></div>)
+  console.log(data);
+  
   return (
     <>
-      <Post />
+      <CreatePostForm />
       <div className="row bg-light text-dark rounded">
         <div className="col-sm rounded">
           <div className="float-left p-4">
             <h3 className="display-3">Wall</h3>
           </div>
           <div className="float-right p-4">
-            <button type="button" className="btn btn-primary m-4">
-              Posts{" "}
-              <span className="badge badge-light">{data?.posts?.length}</span>
-            </button>
             <SubscribeButton fromUser="1" toUser={userId!}/>
           </div>
           <div className="clearfix"></div>

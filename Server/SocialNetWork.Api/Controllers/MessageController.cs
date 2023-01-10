@@ -40,10 +40,8 @@ public class MessageController : ControllerBase
         public async Task<ActionResult<string>> CreateMessage([FromBody] MessageDto message)
         {
             var userResult = await getUsers(new int[]{message.SenderId, message.ReceiverId});
-            if (userResult.userIdsNotFound.Any()){
-                return BadRequest("Unable to find the user for id: " + string.Join(",", userResult.userIdsNotFound));
-            }
-
+            if (userResult.userIdsNotFound.Any()) return BadRequest("Unable to find the user for id: " + string.Join(",", userResult.userIdsNotFound));
+            
             var numberOfAddedMessages = await _messageRepository.CreateAsync(
                 new Message {
                     Sender = userResult.users.Where(x => x.Id == message.SenderId).FirstOrDefault(),
@@ -79,10 +77,8 @@ public class MessageController : ControllerBase
         {
             
             var userResult = await getUsers(new int[]{userA, userB});
-            if (userResult.userIdsNotFound.Any()){
-                return BadRequest("Unable to find the user for id: " + string.Join(separator: ",", userResult.userIdsNotFound));
-            }
-
+            if (userResult.userIdsNotFound.Any()) return BadRequest("Unable to find the user for id: " + string.Join(separator: ",", userResult.userIdsNotFound));
+            
             var spec = new MessageFilter_UsersConversation(userA, userB);
             var messages = await _messageRepository.ListWithSpec(spec: spec);
             

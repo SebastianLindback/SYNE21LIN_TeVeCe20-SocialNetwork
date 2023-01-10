@@ -1,15 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react'
-import Agent from '../actions/Agent';
+import Agent from '../../actions/Agent';
 import { Link } from 'react-router-dom';
-import DeleteUserButton from './buttons/DeleteUserButton';
+import DeleteUserButton from '../buttons/DeleteUserButton';
+import { UsersResponse } from '../../models/UsersResponse';
+import { AxiosError } from 'axios';
+import ErrorPage from '../../pages/shared/ErrorPage';
 
-export default function AllUsers() {
+export default function DeleteUsers() {
     const queryKey = ["wallData"];
-    const { data } = useQuery({
-    queryKey: queryKey,
-    queryFn: () => Agent.Users.All().then((response) => response),
-  });
+    const { data, error } = useQuery<UsersResponse, AxiosError>({
+      queryKey: queryKey,
+      retry : () => false,
+      queryFn: () => Agent.Users.All().then((response) => response),
+    });
+  
+    if (error) return <ErrorPage error={error}/>
 
   return (<>
     {data && (
@@ -20,7 +26,7 @@ export default function AllUsers() {
                   <Link to={`/user/${x.id}`}>
                     <img
                       className="mr-3 rounded-circle"
-                      src={require("../photos/profile.png")}
+                      src={require("../../photos/profile.png")}
                       alt={`profile of ${x.name}}`}
                     />
                   </Link>

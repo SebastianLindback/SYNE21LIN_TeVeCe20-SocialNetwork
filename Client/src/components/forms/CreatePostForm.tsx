@@ -1,12 +1,19 @@
 import React, { ChangeEvent,  useState } from 'react';
-import Agent from '../actions/Agent';
+import Agent from '../../actions/Agent';
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
-const Post = () => {
+enum btnStates {
+    neutral = "send",
+    success = "sent"
+}
+
+const CreatePostForm = () => {
 
     const queryClient = useQueryClient()
     const [textAreaValue, settextAreaValue] = useState('');
+    const [btn, setBtn] = useState<btnStates | string>(btnStates.neutral)
     const { userId } = useParams<{ userId: string }>();
     
     const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -22,12 +29,15 @@ const Post = () => {
                 userId: parseInt(userId ?? '0'),
                 userName: ""
             });
-        } 
-        ,
+        },
         onSuccess: () => {
             queryClient.invalidateQueries(['UserWallData']);
             settextAreaValue('');
+            setBtn(btnStates.success)
         },
+        onError : (error : AxiosError) => {
+            setBtn(error.message)
+        }
     });
 
     
@@ -47,8 +57,8 @@ const Post = () => {
                             value={textAreaValue}>
                         </textarea>
                     </div>
-                    <button type="submit" className="btn btn-primary "
-                        onClick={() => addPostMutation.mutate()}>Send</button>
+                    <button type="submit" className="btn btn-primary " style={btn === btnStates.success ? {backgroundColor:"green"} : btn !== btnStates.neutral ? {backgroundColor:"red"} : {}}
+                        onClick={() => addPostMutation.mutate()}>{btn}</button>
 
                 </div>
             </div>
@@ -56,4 +66,4 @@ const Post = () => {
     );
 };
 
-export default Post;
+export default CreatePostForm;

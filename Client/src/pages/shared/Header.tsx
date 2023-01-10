@@ -7,7 +7,7 @@ export default function Header() {
     <div className="header" onClick={() => navigate("/")}>
         <img
         className="Logo"
-        src={require("../photos/SocialMediaLogo.png")}
+        src={require("../../photos/SocialMediaLogo.png")}
         alt=""
         />
         <h1 className="display-1 center">

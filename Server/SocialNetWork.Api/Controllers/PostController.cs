@@ -56,8 +56,7 @@ namespace SocialNetwork.Api.Controllers
         {
             var post = _mapper.Map<Post>(postDto);
             var user = await _userRepository.GetByIdAsync(postDto.UserId);
-            if (user != null)
-                post.User = user;
+            if (user != null) post.User = user;
 
             var postCreated = await _postRepository.CreateAsync(post);
             var postCreatedDto = _mapper.Map<PostDto>(post);
