@@ -14,7 +14,7 @@ const Wall = () => {
 
   const { isLoading, error, data } = useQuery<PostsResponse, AxiosError>({
     queryKey: ["UserWallData"],
-    queryFn: () => Agent.Posts.User(fromUserId!, toUserId!).then((response) => response)
+    queryFn: () => Agent.Posts.ToUser(toUserId!).then((response) => response)
   });
 
   if (isLoading) return <div className="container"><CreatePostForm /><LoadingPage/></div>

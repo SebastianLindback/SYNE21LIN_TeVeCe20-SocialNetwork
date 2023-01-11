@@ -26,8 +26,7 @@ const CreatePostForm = () => {
                 id: 0,
                 message: textAreaValue,
                 createdDate: new Date(),
-                userId: parseInt(userId ?? '0'),
-                userName: ""
+                senderId: parseInt(userId ?? '0')
             });
         },
         onSuccess: () => {

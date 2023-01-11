@@ -64,17 +64,7 @@ namespace SocialNetwork.Api.Controllers
             return BadRequest("Issue removing user");
         }
 
-        [HttpPost("posts")]
-        public async Task<UsersDto> GetPostsFromSubscribers(int[] usersId)
-        {
-            var spec = new UserFilter_GetUserPosts(usersId);
-            var users = await _userRepository.ListWithSpec(spec);
-            var userDtos = _mapper.Map<ICollection<UserDto>>(users);
-            return new UsersDto
-            {
-                Users = userDtos
-            };
-        }
+        
 
     }
 }

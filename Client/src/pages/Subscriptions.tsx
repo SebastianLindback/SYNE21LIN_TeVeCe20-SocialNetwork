@@ -40,7 +40,7 @@ const Subscription = () => {
       {data?.subscriptions.map((subscription) => (
               <div className="row">
                 <div className="mx-auto UserInformation " key={data.subscriptions.indexOf(subscription)}>
-                    <Link to={`/user/${subscription.subscribedToId}`}>
+                    <Link to={`/user/1/${subscription.subscribedToId}`}>
                       <img
                         className="mr-3 rounded-circle"
                         src={require("../photos/profile.png")}

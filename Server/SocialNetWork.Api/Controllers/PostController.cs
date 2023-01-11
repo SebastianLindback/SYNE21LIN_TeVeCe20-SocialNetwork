@@ -45,12 +45,24 @@ namespace SocialNetwork.Api.Controllers
         }
 
         [HttpGet("{toUserId}")]
-        public async Task<PostDto> Get(int toUserId)
+        public async Task<ICollection<PostDto>> Get(int toUserId)
         {
-            var spec = new PostFilter_GetPostFromUser(toUserId);
-            var post = await _postRepository.ListWithSpec(spec);
-            var postDto = _mapper.Map<PostDto>(post);
-            return postDto;
+            var spec = new PostFilter_GetPostsToUser(toUserId);
+            var posts = await _postRepository.ListWithSpec(spec);
+            var postsDto = _mapper.Map<ICollection<PostDto>>(posts);
+            return postsDto;
+        }
+
+        [HttpPost("from/users")]
+        public async Task<PostsDto> GetPostsFromUsers([FromBody] int[] usersId)
+        {
+            var spec = new PostFilter_GetPostsFromUsers(usersId);
+            var posts = await _postRepository.ListWithSpec(spec);
+            var postsDtos = _mapper.Map<ICollection<PostDto>>(posts);
+            return new PostsDto
+            {
+                Posts = postsDtos
+            };
         }
 
 

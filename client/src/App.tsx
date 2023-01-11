@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./App.css";
 import "./css/style.css";
-import Wall from "./pages/Wall";
+import Feed from "./pages/Feed";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import UserWall from "./pages/UserWall";
 import Conversation from "./pages/Conversation";
@@ -21,7 +21,7 @@ const router = createBrowserRouter([
     children: [
     {
       path: "/",
-      element: <Wall />,
+      element: <Feed />,
     },
     {
       path: "user/:fromUserId/:toUserId",

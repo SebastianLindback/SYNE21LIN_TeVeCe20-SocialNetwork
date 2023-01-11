@@ -2,6 +2,8 @@ export interface Post {
     id: number;
     message: string;
     createdDate: Date;
-    userId: number;
-    userName: string;
+    receiverId?: number,
+    receiverName?: string ,
+    senderId?: number,
+    senderName?: string
 }

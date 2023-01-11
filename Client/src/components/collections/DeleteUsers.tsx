@@ -23,7 +23,7 @@ export default function DeleteUsers() {
           {data?.users.map((x) => (
               <div className="UserInformation mx-auto"  key={data.users.indexOf(x)}>
                 <h4>
-                  <Link to={`/user/${x.id}`}>
+                  <Link to={`/user/1/${x.id}`}>
                     <img
                       className="mr-3 rounded-circle"
                       src={require("../../photos/profile.png")}

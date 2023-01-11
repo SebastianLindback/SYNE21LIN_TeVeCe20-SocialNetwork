@@ -23,14 +23,14 @@ export default function AllUsers() {
           {data?.users.map((x) => (
               <div className="UserInformation mx-auto"  key={data.users.indexOf(x)}>
                 <h4>
-                  <Link to={`/user/${x.id}`}>
+                  <Link to={`/user/1/${x.id}`}>
                     <img
                       className="mr-3 rounded-circle"
                       src={require("../../photos/profile.png")}
                       alt={`profile of ${x.name}}`}
                     />
                   </Link>
-                  <Link to={`/user/${x.id}`} className={"text-white"}>{x.name}</Link>
+                  <Link to={`/user/1/${x.id}`} className={"text-white"}>{x.name}</Link>
                   <div>
                     {/* Hårdkodad länk */}
                     <Link to={`/conversation/1/${x.id}`}>

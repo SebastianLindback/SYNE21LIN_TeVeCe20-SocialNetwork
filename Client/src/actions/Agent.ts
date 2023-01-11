@@ -25,14 +25,14 @@ const requests = {
 const Posts = {
   All: (params?: URLSearchParams) =>
     requests.get<PostsResponse>("/Post", params),
-  User: (fromUserId: string, toUserId: string) => requests.get<PostsResponse>(`/Post/${fromUserId}/${toUserId}`),
+  ToUser: (toUserId: string) => requests.get<PostsResponse>(`/Post/${toUserId}`),
+  FromUsers: (userIds: number[]) => requests.post<PostsResponse>(`/Post/from/users`, userIds),
   Save: (post: Post) => requests.post<PostResponse>("/Post", post),
 };
 
 const Users = {
   All: (params?: URLSearchParams) =>
     requests.get<UsersResponse>("/user", params),
-  Posts: (usersId:number[]) => requests.post<UsersResponse>(`/user/posts/`, usersId),
   Create: (name?: string) =>
     requests.get<UsersResponse>(`/user/create?Name=${name}`),
   Send: (post: Post) => requests.post<UsersResponse>("/user", post),

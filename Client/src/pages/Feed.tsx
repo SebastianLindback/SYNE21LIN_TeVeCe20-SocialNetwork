@@ -1,5 +1,5 @@
 import Agent from "../actions/Agent";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/UserStyle.css";
 import React from "react";
 import moment from "moment";
@@ -11,24 +11,27 @@ import { UsersResponse } from "../models/UsersResponse";
 import Heading from "../components/Heading";
 import NavMenu from "../components/NavMenu";
 import ErrorPage from "./shared/ErrorPage";
+import { PostsResponse } from "../models/PostsResponse";
+import { FaRegCommentAlt, FaArrowRight } from "react-icons/fa";
 
-const Wall = () => {
+const Feed = () => {
   const navigate = useNavigate()
 
   const {currentSubscriptions} = GetSubscription("1");
   var ids = currentSubscriptions?.subscriptions.map(x => x.subscribedToId);  
 
-  const { data, error} = useQuery<UsersResponse, AxiosError>({
+  const { data, error} = useQuery<PostsResponse, AxiosError>({
       queryKey: ["posts-from-subscriptions"],
       retry: () => false,
-      queryFn: () => Agent.Users.Posts(ids! && ids!)
+      enabled: ids?.length! > 0  ? true : false,
+      queryFn: () => Agent.Posts.FromUsers(ids!)
   });
 
   if (error ) return (<div className="container">
       {/* MENU */}
       <NavMenu menuItems={[
         {to:"/subscriptions/1", text:"My Subscriptions"},
-        {to:"/user/1", text:"My public wall"},
+        {to:"/user/1/1", text:"My public wall"},
         {to:"/explore", text:"Explore Users"},
         {to:"/admin", text:"Admin"},
       ]}/>
@@ -40,51 +43,59 @@ const Wall = () => {
       <ErrorPage error={error}/>
     </div>
   );  
-    
+    console.log(data)
   return (
     <>
     {/* MENU */}
     <NavMenu menuItems={[
         {to:"/subscriptions/1", text:"My Subscriptions"},
-        {to:"/user/1", text:"My public wall"},
+        {to:"/user/1/1", text:"My public wall"},
         {to:"/explore", text:"Explore Users"},
         {to:"/admin", text:"Admin"},
       ]}/>
 
     {/* HEADER */}
-    <Heading title="Your Wall" subtitle="Will display posts from your subscriptions"/>
+    <Heading title="Your Feed" subtitle="Will display posts from your subscriptions"/>
 
     {/* CONTENT */}
-    <div className="row mx-auto" style={{maxWidth:"800px"}}>
-      {data && data?.users?.map(user => (user.posts.map(post => 
+    <div className="container mx-auto col-12" style={{maxWidth:"800px"}}>
+      {data && data.posts.map(post => 
         
-        <div className="row col-12 text-white UserInformation" key={post.id}>
-          <div className="col-4">
+        <div className="row text-white UserInformation mx-auto d-flex flex-row col-12" key={post.id}>
+          <div className="col-md-4 col-sm-12">
                 <img
-                  className="row mr-3 rounded-circle"
+                  className="row mr-3 mx-auto rounded-circle"
                   src={require("../photos/profile.png")}
-                  alt={`profile of ${post.userName}}`}
-                  onClick={() => navigate(`/user/${post.userId}`)}
+                  alt={`profile of ${post.senderName}}`}
+                  onClick={() => navigate(`/user/1/${post.senderId}`)}
                 />
+                <div className="row d-flex flex-column">
+                <h3 className="mx-auto text-center py-2"><Link className="text-white " to={`/user/1/${post.senderId}`}>{post.senderName}</Link></h3>
+                <h4 className="mx-auto ">{<FaRegCommentAlt/>}</h4>
+                <h3 className="mx-auto"><Link className="text-white" to={`/user/1/${post.receiverId}`}>{post.receiverName}</Link></h3>
+                </div>
+                
           
           </div>
-          <div className="col-8">
-            <div className="row d-flex flex-column" style={{height:"100px"}}>
-              <h3>{post.userName}</h3>
+          <div className="col-md-8  col-sm-12">
+            
+            <div className="row d-flex flex-column justify-content-center text-center h-50">
               <p>{post.message}</p>
               <span className="text-muted">{moment( post.createdDate).format("YYYY-MM-DD HH:MM")}</span>
+              
+              
             </div>
-            <div className="row float-right" style={{height:"50px"}}>
-              <SubscribeButton fromUser="1" toUser={post.userId.toString()}/>
+            <div className="row d-flex flex-row justify-content-center m-0">
+              <SubscribeButton fromUser="1" toUser={post.senderId!.toString()}/>
               <button id="MessageButton" onClick={() => navigate(`/conversation/1/${post.id}`)} className="btn btn-primary m-4">Message</button>
           </div>
           </div>
         </div> 
         )
-      ))} 
+      } 
     </div>
     </>
   );
 };
 
-export default Wall;
+export default Feed;

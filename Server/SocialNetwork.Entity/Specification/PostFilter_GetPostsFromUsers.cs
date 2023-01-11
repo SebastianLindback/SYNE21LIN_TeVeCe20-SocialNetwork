@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using SocialNetwork.Entity;
 
 namespace SocialNetwork.Entity.Specification;
-public class PostFilter_GetPostsToUser : BaseSpecification<Post>
+public class PostFilter_GetPostsFromUsers : BaseSpecification<Post>
 {
-    public PostFilter_GetPostsToUser(int toUserId) : base(x => (
-        (x.ReceiverId == toUserId)
+    public PostFilter_GetPostsFromUsers(int[] UsersId) : base(x => (
+        (UsersId.Contains(x.SenderId))
         ))
     {
         IncludeMethod(x => x.Receiver!);
