@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.IO.Compression;
+using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Entity;
 
 namespace SocialNetwork.Infrastructure
@@ -19,6 +20,15 @@ namespace SocialNetwork.Infrastructure
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<Post>().HasOne(x => x.Receiver)
+            .WithMany(x => x.Posts)
+            .HasForeignKey(x => x.ReceiverId)
+            .OnDelete(DeleteBehavior.Restrict); 
+
+            builder.Entity<Post>().HasOne(x => x.Receiver)
+            .WithMany(x => x.Posts)
+            .HasForeignKey(x => x.ReceiverId)
+            .OnDelete(DeleteBehavior.Restrict); 
         }
     }
 }

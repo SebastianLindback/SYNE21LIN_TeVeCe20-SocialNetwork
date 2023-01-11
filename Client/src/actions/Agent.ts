@@ -25,7 +25,7 @@ const requests = {
 const Posts = {
   All: (params?: URLSearchParams) =>
     requests.get<PostsResponse>("/Post", params),
-  User: (id?: string) => requests.get<PostsResponse>(`/Post/${id}`),
+  User: (fromUserId: string, toUserId: string) => requests.get<PostsResponse>(`/Post/${fromUserId}/${toUserId}`),
   Save: (post: Post) => requests.post<PostResponse>("/Post", post),
 };
 

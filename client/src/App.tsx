@@ -24,7 +24,7 @@ const router = createBrowserRouter([
       element: <Wall />,
     },
     {
-      path: "user/:userId",
+      path: "user/:fromUserId/:toUserId",
       element: <UserWall />,
     },
     {

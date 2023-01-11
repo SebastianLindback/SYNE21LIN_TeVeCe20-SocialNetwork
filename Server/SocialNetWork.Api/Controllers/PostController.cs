@@ -33,8 +33,10 @@ namespace SocialNetwork.Api.Controllers
             var postDtos = _mapper.Map<ICollection<PostDto>>(posts.OrderByDescending(x => x.CreatedDate));
             foreach (var postDto in postDtos)
             {
-                var user = await _userRepository.GetByIdAsync(postDto.Id);
-                postDto.UserName = user.Name;
+                var receiver = await _userRepository.GetByIdAsync(postDto.ReceiverId);
+                postDto.ReceiverName = receiver.Name;
+                var sender = await _userRepository.GetByIdAsync(postDto.SenderId);
+                postDto.SenderName = sender.Name;
             }
             return new PostsDto
             {
@@ -42,10 +44,11 @@ namespace SocialNetwork.Api.Controllers
             };
         }
 
-        [HttpGet("{userId}")]
-        public async Task<PostDto> Get(int userId)
+        [HttpGet("{toUserId}")]
+        public async Task<PostDto> Get(int toUserId)
         {
-            var post = await _postRepository.GetByIdAsync(userId);
+            var spec = new PostFilter_GetPostFromUser(toUserId);
+            var post = await _postRepository.ListWithSpec(spec);
             var postDto = _mapper.Map<PostDto>(post);
             return postDto;
         }
@@ -55,8 +58,11 @@ namespace SocialNetwork.Api.Controllers
         public async Task<PostDto> Post(PostDto postDto)
         {
             var post = _mapper.Map<Post>(postDto);
-            var user = await _userRepository.GetByIdAsync(postDto.UserId);
-            if (user != null) post.User = user;
+            var sender = await _userRepository.GetByIdAsync(postDto.SenderId);
+            if (sender != null) post.Sender = sender;
+
+            var receiver = await _userRepository.GetByIdAsync(postDto.ReceiverId);
+            if (receiver != null) post.Receiver = receiver;
 
             var postCreated = await _postRepository.CreateAsync(post);
             var postCreatedDto = _mapper.Map<PostDto>(post);

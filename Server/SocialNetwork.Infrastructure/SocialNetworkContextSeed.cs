@@ -12,27 +12,13 @@ namespace SocialNetwork.Infrastructure
                 var user = new User
                 {
                     Name = "Robert Jansz",
-                    Posts = new List<Post>
-                    {
-                        new Post
-                        {
-                            CreatedDate = DateTime.Now,
-                            Message = "Hello World",
-                        }
-                    }
+                    
                 };
 
                 var user2 = new User
                 {
                     Name = "Jonny Cage ",
-                    Posts = new List<Post>
-                    {
-                        new()
-                        {
-                            CreatedDate = DateTime.Now,
-                            Message = "Hello Again",
-                        }
-                    }
+                    
                 };
 
                 await context.Users.AddRangeAsync(user);
@@ -40,7 +26,28 @@ namespace SocialNetwork.Infrastructure
 
                 await context.SaveChangesAsync();
             }
+            if (!context.Posts.Any()){
+                var post = new Post
+                {
+                    Message = "Hello World!",
+                    CreatedDate = DateTime.Now.AddMinutes(-30),
+                    SenderId = 1,
+                    ReceiverId = 2,
+                };
 
+                var post2 = new Post
+                {
+                    Message = "Hello Again!",
+                    CreatedDate = DateTime.Now,
+                    SenderId = 2,
+                    ReceiverId = 1,
+                };
+
+                await context.Posts.AddRangeAsync(post);
+                await context.Posts.AddRangeAsync(post2);
+
+                await context.SaveChangesAsync();
+            }
             if (!context.Subscriptions.Any())
             {
 

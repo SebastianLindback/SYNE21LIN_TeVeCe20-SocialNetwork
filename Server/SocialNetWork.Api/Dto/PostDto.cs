@@ -10,9 +10,10 @@ namespace SocialNetwork.Api.Dto
         public string? Message { get; set; }
         public DateTime CreatedDate { get; set; }
 
-        public int UserId { get; set; }
-
-        public string? UserName { get; set; }
+        public int ReceiverId { get; set; }
+        public string? ReceiverName { get; set; }
+        public int SenderId { get; set; }
+        public string? SenderName { get; set; }
 
     }
 }

@@ -10,11 +10,11 @@ import ErrorPage from "./shared/ErrorPage";
 import LoadingPage from "./shared/LoadingPage";
 
 const Wall = () => {
-  const { userId } = useParams<{ userId: string }>();
+  const { fromUserId, toUserId } = useParams<{ fromUserId: string, toUserId: string  }>();
 
   const { isLoading, error, data } = useQuery<PostsResponse, AxiosError>({
     queryKey: ["UserWallData"],
-    queryFn: () => Agent.Posts.User(userId).then((response) => response)
+    queryFn: () => Agent.Posts.User(fromUserId!, toUserId!).then((response) => response)
   });
 
   if (isLoading) return <div className="container"><CreatePostForm /><LoadingPage/></div>
@@ -31,7 +31,7 @@ const Wall = () => {
             <h3 className="display-3">Wall</h3>
           </div>
           <div className="float-right p-4">
-            <SubscribeButton fromUser="1" toUser={userId!}/>
+            <SubscribeButton fromUser={fromUserId!} toUser={toUserId!}/>
           </div>
           <div className="clearfix"></div>
           <ul className="list-unstyled  p-3 mb-2">
