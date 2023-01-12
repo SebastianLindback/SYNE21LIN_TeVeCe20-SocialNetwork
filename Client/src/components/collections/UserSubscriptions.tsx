@@ -25,12 +25,18 @@ export default function UserSubscriptions() {
 
     return (
     <div className="row">
-        {data?.subscriptions.map((subscription) => (
+        {data?.subscriptions.length > 0 ? 
+        
+        data?.subscriptions.map((subscription) => (
             <SubscriptionElement key={data.subscriptions.indexOf(subscription)}  subscription={subscription} buttons={[
                 <SubscribeButton fromUser="1" toUser={`${subscription.subscribedToId}`}/>,
                 <MessageButton fromUser="1" toUser={`${subscription.subscribedToId}`}/>]}
             />
-        ))}
+        ))
+        :
+        <span className='row mx-auto py-5 text-white text-center'>No subscriptions found. Go and follow some users!</span>
+
+        }
     </div>
     )
 }

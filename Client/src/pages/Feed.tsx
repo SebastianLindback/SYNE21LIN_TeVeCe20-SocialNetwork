@@ -21,9 +21,7 @@ const Feed = () => {
     <Heading title="Your Feed" subtitle="Will display posts from your subscriptions"/>
 
     {/* CONTENT */}
-    <div className="container mx-auto col-12" style={{maxWidth:"800px"}}>
-      <PostsFromSubscriptions/>
-    </div>
+    <PostsFromSubscriptions/>
     </>
   );
 };

@@ -57,7 +57,7 @@ namespace SocialNetwork.Api.Controllers
         }
 
         [HttpPost("from/users")]
-        public async Task<PostsDto> GetPostsFromUsers([FromBody] int[] usersId)
+        public async Task<PostsDto> GetPostsFromUsers(int[] usersId)
         {
             var spec = new PostFilter_GetPostsFromUsers(usersId);
             var posts = await _postRepository.ListWithSpec(spec);

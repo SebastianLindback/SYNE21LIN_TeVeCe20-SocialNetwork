@@ -26,7 +26,7 @@ interface props {
 export default function SubscribeButton({fromUser, toUser, style } : props)
 {
     const queryClient = useQueryClient();
-    const querykeys = ["wallData", ["subscriptions-user_" + fromUser], [`current-sub-${fromUser}`], [`posts-from-subscriptions}`]]
+    const querykeys = [["wallData"], ["subscriptions-user_" + fromUser], [`current-sub-${fromUser}`], [`current-sub-${toUser}`], [`posts-from-subscriptions}`]]
 
     const [errorMessage, setErrorMessage] = useState("")
     const [followState, setFollowState] = useState<FollowStates>()
@@ -52,8 +52,11 @@ export default function SubscribeButton({fromUser, toUser, style } : props)
     {
         onSuccess : () => {              
             setFollowState(FollowStates.success)
-            queryClient.invalidateQueries(querykeys);
-            queryClient.refetchQueries(querykeys);
+            querykeys.forEach(querykey => {
+                queryClient.invalidateQueries(querykey);
+                queryClient.refetchQueries(querykey);
+            })
+            
         },
         onError : (error : AxiosError) => {
             setFollowState(FollowStates.error)
@@ -65,8 +68,10 @@ export default function SubscribeButton({fromUser, toUser, style } : props)
     {
         onSuccess : () => {
             setFollowState(FollowStates.neutral);
-            queryClient.invalidateQueries(querykeys);
-            queryClient.refetchQueries(querykeys);
+            querykeys.forEach(querykey => {
+                queryClient.invalidateQueries(querykey);
+                queryClient.refetchQueries(querykey);
+            })
         },
         onError : (error : AxiosError) => {
             setFollowState(FollowStates.error)
@@ -74,7 +79,7 @@ export default function SubscribeButton({fromUser, toUser, style } : props)
         }
     });
     
-    const onclick = debounce(() => followState === FollowStates.neutral ? subscribeToUser() : unSubscribeToUser(),200) ;
+    const onclick = debounce(() => followState === FollowStates.neutral ? subscribeToUser() : unSubscribeToUser(),100) ;
     return (
     
         <button type="button" 
