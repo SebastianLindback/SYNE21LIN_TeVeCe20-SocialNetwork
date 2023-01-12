@@ -11,5 +11,6 @@ public class Subscribe_Filter_GetUser_Subscribtions: BaseSpecification<Subscript
         (x.SubscriberId == Id)
         ))
     {
+        SortByDescendingMethod(x => x.CreatedDate);
     }
 }

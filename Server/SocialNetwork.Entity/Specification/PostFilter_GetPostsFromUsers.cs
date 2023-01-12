@@ -11,7 +11,9 @@ public class PostFilter_GetPostsFromUsers : BaseSpecification<Post>
         (UsersId.Contains(x.SenderId))
         ))
     {
+        
         IncludeMethod(x => x.Receiver!);
         IncludeMethod(x => x.Sender!);
+        SortByDescendingMethod(x => x.CreatedDate);
     }
 }

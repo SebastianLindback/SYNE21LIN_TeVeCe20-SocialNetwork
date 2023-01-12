@@ -34,9 +34,9 @@ namespace SocialNetwork.Api.Controllers
             foreach (var postDto in postDtos)
             {
                 var receiver = await _userRepository.GetByIdAsync(postDto.ReceiverId);
-                postDto.ReceiverName = receiver.Name;
+                if (!string.IsNullOrEmpty(receiver!.Name)) postDto.ReceiverName = receiver.Name;
                 var sender = await _userRepository.GetByIdAsync(postDto.SenderId);
-                postDto.SenderName = sender.Name;
+                if (!string.IsNullOrEmpty(sender!.Name)) postDto.SenderName = sender.Name;
             }
             return new PostsDto
             {
@@ -45,12 +45,15 @@ namespace SocialNetwork.Api.Controllers
         }
 
         [HttpGet("{toUserId}")]
-        public async Task<ICollection<PostDto>> Get(int toUserId)
+        public async Task<PostsDto> Get(int toUserId)
         {
             var spec = new PostFilter_GetPostsToUser(toUserId);
             var posts = await _postRepository.ListWithSpec(spec);
             var postsDto = _mapper.Map<ICollection<PostDto>>(posts);
-            return postsDto;
+            return new PostsDto
+            {
+                Posts = postsDto
+            };
         }
 
         [HttpPost("from/users")]

@@ -5,8 +5,14 @@ import { MessagesResponse } from '../models/MessagesResponse';
 import { AxiosError } from 'axios';
 import { Message } from '../models/Message';
 
-export function GetConversation(userAId : string, userBId : string) {
+export function GetQueryKey_Conversation(userAId : string, userBId : string) {
     const queryKey = [`conversation-${userAId}-${userBId}`];
+    
+    return queryKey
+}
+
+export function GetConversation(userAId : string, userBId : string) {
+    const queryKey = GetQueryKey_Conversation(userAId!, userBId!);
     const { isLoading, isError, error, data, failureCount  } = useQuery<MessagesResponse, AxiosError, MessagesResponse, string[]>({
         queryKey: queryKey,
         retry: (failureCount, error) => failureCount < 1 && error.response?.status === 400,
@@ -16,7 +22,7 @@ export function GetConversation(userAId : string, userBId : string) {
             return  Agent.Messages.Conversation(userAId!, userBId!);
         }
     });
-    return {isLoading, isError, error, data, failureCount, queryKey }
+    return {isLoading, isError, error, data, failureCount }
 }
 
 export function SendMessage(queryKey : string[]) {

@@ -9,42 +9,65 @@ namespace SocialNetwork.Infrastructure
             if (!context.Users.Any())
             {
 
-                var user = new User
+                var users = new List<User>{ 
+                new User
                 {
                     Name = "Robert Jansz",
                     
-                };
-
-                var user2 = new User
+                },
+                new User
                 {
-                    Name = "Jonny Cage ",
+                    Name = "Johnny Cage",
                     
+                },
+                new User
+                {
+                    Name = "Jane Doe",
+                    
+                },
+                new User
+                {
+                    Name = "John Doe ",
+                    
+                },
                 };
-
-                await context.Users.AddRangeAsync(user);
-                await context.Users.AddRangeAsync(user2);
+                await context.Users.AddRangeAsync(users);
 
                 await context.SaveChangesAsync();
             }
             if (!context.Posts.Any()){
-                var post = new Post
+                List<Post> posts = new List<Post>{
+                new Post
                 {
-                    Message = "Hello World!",
-                    CreatedDate = DateTime.Now.AddMinutes(-30),
+                    Message = "Hello 2!",
+                    CreatedDate = DateTime.Now.AddMinutes(-1),
                     SenderId = 1,
                     ReceiverId = 2,
-                };
-
-                var post2 = new Post
+                },
+                new Post
                 {
-                    Message = "Hello Again!",
-                    CreatedDate = DateTime.Now,
+                    Message = "Hello 1!",
+                    CreatedDate = DateTime.Now.AddMinutes(-2),
                     SenderId = 2,
                     ReceiverId = 1,
+                },
+                new Post
+                {
+                    Message = "Hello 3!",
+                    CreatedDate = DateTime.Now.AddMinutes(-3),
+                    SenderId = 3,
+                    ReceiverId = 4,
+                },
+                new Post
+                {
+                    Message = "Hello 4!",
+                    CreatedDate = DateTime.Now.AddMinutes(-4),
+                    SenderId = 4,
+                    ReceiverId = 3,
+                }
                 };
 
-                await context.Posts.AddRangeAsync(post);
-                await context.Posts.AddRangeAsync(post2);
+                await context.Posts.AddRangeAsync(posts);
 
                 await context.SaveChangesAsync();
             }
@@ -53,18 +76,8 @@ namespace SocialNetwork.Infrastructure
 
                 var subscription = new Subscription
                 {
-                    Id = 1,
-                    SubscribedTo = new User
-                    {
-                        Name = "Robert Jansz"
-                    },
-
-
-                    Subscriber = new User
-                    {
-                        Name = "Jonny Cage "
-                    },
-
+                    SubscriberId = 1,
+                    SubscribedToId = 2,
                     CreatedDate = DateTime.Now
                 };
 

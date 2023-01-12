@@ -13,5 +13,6 @@ public class PostFilter_GetPostsToUser : BaseSpecification<Post>
     {
         IncludeMethod(x => x.Receiver!);
         IncludeMethod(x => x.Sender!);
+        SortByDescendingMethod(x => x.CreatedDate);
     }
 }

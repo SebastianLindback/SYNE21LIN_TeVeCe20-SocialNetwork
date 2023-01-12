@@ -6,38 +6,30 @@ import DeleteUserButton from '../buttons/DeleteUserButton';
 import { UsersResponse } from '../../models/UsersResponse';
 import { AxiosError } from 'axios';
 import ErrorPage from '../../pages/shared/ErrorPage';
+import UserElement from '../elements/UserElement';
+import LoadingPage from '../../pages/shared/LoadingPage';
 
 export default function DeleteUsers() {
     const queryKey = ["wallData"];
-    const { data, error } = useQuery<UsersResponse, AxiosError>({
+    const { data, isLoading, error } = useQuery<UsersResponse, AxiosError>({
       queryKey: queryKey,
       retry : () => false,
       queryFn: () => Agent.Users.All().then((response) => response),
     });
-  
+    
+    if (isLoading) return <div className="container"><LoadingPage/></div>
+
     if (error) return <ErrorPage error={error}/>
 
   return (<>
     {data && (
         <div className="row">
-          {data?.users.map((x) => (
-              <div className="UserInformation mx-auto"  key={data.users.indexOf(x)}>
-                <h4>
-                  <Link to={`/user/1/${x.id}`}>
-                    <img
-                      className="mr-3 rounded-circle"
-                      src={require("../../photos/profile.png")}
-                      alt={`profile of ${x.name}}`}
-                    />
-                  </Link>
-                  {x.name}
-                  <div>
-                    <DeleteUserButton userId={x.id.toString()}/>
-                  </div>
-                  <br />
-                </h4>
-              </div>
+          {data?.users.map((user) => (
+              <UserElement key={data.users.indexOf(user)} user={user} buttons={[
+                <DeleteUserButton userId={user.id.toString()}/>
+              ]}/>
           ))}
+          
           </div>)}
           </>
           

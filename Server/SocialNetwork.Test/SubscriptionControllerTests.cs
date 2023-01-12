@@ -75,7 +75,7 @@ namespace SocialNetwork.Test
         }       
 
         [TestMethod]
-        public async Task CreateMessage_ShouldAddMessageToDB()
+        public async Task Follow_ShouldAddSubscriptionToDB()
         {
             // Arrange
 
@@ -86,6 +86,7 @@ namespace SocialNetwork.Test
                     Name = "Test User"
                 }
             );
+            _subscriptionRepositoryMock.Setup(x => x.ListWithSpec(It.IsAny<ISpecification<Subscription>>())).ReturnsAsync(new List<Subscription>()); 
             _subscriptionRepositoryMock.Setup(x => x.CreateAsync(It.IsAny<Subscription>())).ReturnsAsync(1); 
             
             var subscriptionController = new SubscriptionController(_subscriptionRepositoryMock.Object, _userRepositoryMock.Object,_mapper);
@@ -97,7 +98,34 @@ namespace SocialNetwork.Test
             var _sup = await subscriptionController.Follow(subscriberId, subscribedToId);
             var result = _sup.Result as OkObjectResult;
             // Assert
-            Assert.AreEqual("Subscribed successfull", result.Value);
+            Assert.AreEqual("Subscribed successfull", result!.Value);
+
+
+
+        }
+
+        [TestMethod]
+        public async Task Delete_ShouldRemoveSubscriptionFromDB()
+        {
+            // Arrange
+            _subscriptionRepositoryMock.Setup(x => x.ListWithSpec(It.IsAny<ISpecification<Subscription>>()))
+            .ReturnsAsync(new List<Subscription>{
+                new Subscription{
+                    Id=1
+                }
+            }); 
+            _subscriptionRepositoryMock.Setup(x => x.RemoveEntryByIdAsync(It.IsAny<int>())).ReturnsAsync(1); 
+            
+            var subscriptionController = new SubscriptionController(_subscriptionRepositoryMock.Object, _userRepositoryMock.Object,_mapper);
+            
+            var subscriberId = 1;
+            var subscribedToId = 2;
+            
+            // Act
+            var _sup = await subscriptionController.DeleteSubscriptions(subscriberId, subscribedToId);
+            var result = _sup.Result as OkObjectResult;
+            // Assert
+            Assert.AreEqual("subscription removed", result!.Value);
 
 
 

@@ -1,5 +1,5 @@
 export interface Post {
-    id: number;
+    id?: number;
     message: string;
     createdDate: Date;
     receiverId?: number,

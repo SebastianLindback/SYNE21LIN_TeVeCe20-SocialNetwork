@@ -88,15 +88,15 @@ namespace SocialNetwork.Api.Controllers
             
         }
 
-        [HttpGet("follow")]
-        public async Task<ActionResult<SubscriptionsDto>> Follow([FromQuery] int Subscriber, [FromQuery] int SubscribedTo)
+        [HttpGet("follow/{subscriber}/{subscribedTo}")]
+        public async Task<ActionResult<SubscriptionsDto>> Follow(int subscriber, int subscribedTo)
         {
-            var spec = new Subscribe_Filter_GetSubscribtions(Subscriber, SubscribedTo);
+            var spec = new Subscribe_Filter_GetSubscribtions(subscriber, subscribedTo);
             var Subscriptions = await _subscriptionRepository.ListWithSpec(spec);
             if (Subscriptions.Any()) return BadRequest(error: "Subscription already exist");
 
-            var User = await _userRepository.GetByIdAsync(Subscriber);
-            var Follower = await _userRepository.GetByIdAsync(SubscribedTo);
+            var User = await _userRepository.GetByIdAsync(subscriber);
+            var Follower = await _userRepository.GetByIdAsync(subscribedTo);
             if (User == null) return BadRequest(error: "User not found");
             if (Follower == null) return BadRequest(error: "User not found");
 

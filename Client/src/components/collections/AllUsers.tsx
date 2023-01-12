@@ -6,6 +6,8 @@ import SubscribeButton from '../buttons/SubscribeButton';
 import { UsersResponse } from '../../models/UsersResponse';
 import { AxiosError } from 'axios';
 import ErrorPage from '../../pages/shared/ErrorPage';
+import UserElement from '../elements/UserElement';
+import MessageButton from '../buttons/MessageButton';
 
 export default function AllUsers() {
     const queryKey = ["wallData"];
@@ -20,29 +22,13 @@ export default function AllUsers() {
   return (<>
     {data && (
         <div className="row">
-          {data?.users.map((x) => (
-              <div className="UserInformation mx-auto"  key={data.users.indexOf(x)}>
-                <h4>
-                  <Link to={`/user/1/${x.id}`}>
-                    <img
-                      className="mr-3 rounded-circle"
-                      src={require("../../photos/profile.png")}
-                      alt={`profile of ${x.name}}`}
-                    />
-                  </Link>
-                  <Link to={`/user/1/${x.id}`} className={"text-white"}>{x.name}</Link>
-                  <div>
-                    {/* Hårdkodad länk */}
-                    <Link to={`/conversation/1/${x.id}`}>
-                      <button id="MessageButton" className="btn btn-primary m-4">Message</button>
-                    </Link>
-                    <SubscribeButton fromUser="1" toUser={x.id.toString()}/>
-                  </div>
-                  <br />
-                </h4>
-              </div>
+          {data?.users.map((user) => (
+            <UserElement key={data.users.indexOf(user)}  user={user} buttons={[
+              <SubscribeButton fromUser="1" toUser={`${user.id}`}/>,
+              <MessageButton fromUser="1" toUser={`${user.id}`}/>
+            ]}/>
           ))}
-          </div>)}
+        </div>)}
           </>
           
   )

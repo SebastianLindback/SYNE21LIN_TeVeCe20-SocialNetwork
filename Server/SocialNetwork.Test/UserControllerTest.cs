@@ -76,7 +76,7 @@ namespace SocialNetwork.Test
             var users = await userController.CreateUser("Test User");
             var result = users.Result as OkObjectResult;
             // Assert
-            Assert.AreEqual("user created", result.Value);
+            Assert.AreEqual("User created", result!.Value);
         }
 
         [TestMethod]

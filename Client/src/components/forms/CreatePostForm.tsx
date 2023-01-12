@@ -5,8 +5,8 @@ import { useParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 enum btnStates {
-    neutral = "send",
-    success = "sent"
+    neutral = "Send",
+    success = "Sent"
 }
 
 const CreatePostForm = () => {
@@ -14,7 +14,7 @@ const CreatePostForm = () => {
     const queryClient = useQueryClient()
     const [textAreaValue, settextAreaValue] = useState('');
     const [btn, setBtn] = useState<btnStates | string>(btnStates.neutral)
-    const { userId } = useParams<{ userId: string }>();
+    const { fromUserId, toUserId } = useParams<{ fromUserId :string, toUserId :string}>();
     
     const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         settextAreaValue(event.target.value);
@@ -23,10 +23,10 @@ const CreatePostForm = () => {
     const addPostMutation = useMutation({
         mutationFn: () => {
             return Agent.Posts.Save( {
-                id: 0,
                 message: textAreaValue,
                 createdDate: new Date(),
-                senderId: parseInt(userId ?? '0')
+                senderId: parseInt(fromUserId ?? '0'),
+                receiverId: parseInt(toUserId ?? '0')
             });
         },
         onSuccess: () => {

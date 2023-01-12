@@ -46,7 +46,7 @@ const Messages = {
 }
 
 const Subscription = {
-  Subscribe: (Subscriber?: string, SubscribedTo?: string) => requests.get<MessagesResponse>(`/subscription/follow/?Subscriber=${Subscriber}&SubscribedTo=${SubscribedTo}`),
+  Subscribe: (Subscriber?: string, SubscribedTo?: string) => requests.get<MessagesResponse>(`/subscription/follow/${Subscriber}/${SubscribedTo}`),
   All: (Fromuser?: string) => requests.get<SubscribersResponse>(`/subscription/GetSubscriptions?userId=${Fromuser}`),
   Del: (Subscriber?: string, SubscribedTo?: string) => requests.del<string>(`/subscription/delete/?subscriberId=${Subscriber}&subscribedToId=${SubscribedTo}`)
 }
